@@ -1,14 +1,26 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import * as shell from 'child_process';
+import { NextApiRequest, NextApiResponse } from 'next'
+import * as shell from 'child_process'
 
+type IFiles = {
+    name: string
+    type: string
+    id: number
+}
 
 const getAllTemplates = (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
-        const out = shell.execSync('ls static/templates', {encoding: 'utf8'});
-        const files = out.split('\n').filter((file) => file.includes('.AnB'));
-        return res.status(200).json({message: files});
+        let files: IFiles[] = []
+
+        shell.exec('ls ofmc/examples/classic', (err, stdout, stderr) => {
+            stdout
+                .split('\n')
+                .filter((file) => file.includes('.AnB'))
+                .map((file, index) => {
+                    files.push({ name: file, id: index, type: 'classic' })
+                })
+            return res.status(200).json(files)
+        })
     }
-    return res.status(500).json({message: 'Method not allowed'});
 }
 
-export default getAllTemplates;
+export default getAllTemplates
