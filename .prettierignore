@@ -1,0 +1,17 @@
+# Ignore artifacts:
+build
+coverage
+.next
+.eslintrc.json
+.prettierrc.json
+next-env.d.ts
+next.config.js
+package-lock.json
+package.json
+vitest.config.ts
+tsconfig.json
+tailwind.config.js
+README.md
+postcss.config.js
+docker-compose.yaml
+.eslintrc.json
