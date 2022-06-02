@@ -1,25 +1,60 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import * as shell from 'child_process'
+import * as fs from 'fs'
+import { faker } from '@faker-js/faker'
 
-type IFiles = {
-    name: string
-    type: string
-    id: number
+export enum EProtocolType {
+    SYMKEYNOTTP,
+    AUTHCFF,
+    SYMKEYTPP,
+    PUBKEYNOTTP,
+    PUBKEYTPP,
+    CLASSIC,
+    USERCREATED
 }
 
-const getAllTemplates = (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === 'GET') {
-        let files: IFiles[] = []
+export const getProtocolName = (protocol: EProtocolType) => {
+    const map = new Map<EProtocolType, string>([
+        [EProtocolType.SYMKEYNOTTP, 'SymKeyNoTTP'],
+        [EProtocolType.AUTHCFF, 'AuthCFF'],
+        [EProtocolType.SYMKEYTPP, 'SymKeyTTP'],
+        [EProtocolType.PUBKEYNOTTP, 'PubKeyNoTTP'],
+        [EProtocolType.PUBKEYTPP, 'PubKeyTTP'],
+        [EProtocolType.CLASSIC, 'Classic'],
+        [EProtocolType.USERCREATED, 'UserCreated'],
+    ])
+    return map.get(protocol)
+}
 
-        shell.exec('ls ofmc/examples/classic', (err, stdout, stderr) => {
-            stdout
-                .split('\n')
-                .filter((file) => file.includes('.AnB'))
-                .map((file, index) => {
-                    files.push({ name: file, id: index, type: 'classic' })
-                })
-            return res.status(200).json(files)
-        })
+export type IFiles = {
+    id: number
+    name: string
+    urlSlug: string
+    type: EProtocolType
+    attackTraceUrl?: string
+    isComplete: boolean
+}
+
+
+export const protocols: IFiles[] = faker.datatype.array((30)).map((_, index) => {
+    const name = faker.name.firstName() + ' ' + faker.name.lastName()
+    return {
+        id: index,
+        name,
+        urlSlug: faker.helpers.slugify(name),
+        type: faker.datatype.number({ min: 0, max: 6 }),
+        attackTraceUrl: faker.internet.url(),
+        isComplete: faker.datatype.boolean(),
+    }
+})
+
+
+const getAllTemplates = async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method === 'GET') {
+        try {
+            return res.status(200).json(protocols)
+        } catch (err) {
+            return res.status(500).json({ error: err })
+        }
     }
 }
 

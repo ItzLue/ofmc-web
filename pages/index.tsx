@@ -1,76 +1,29 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import CodeEditor from '@/components/CodeEditor'
-import TopNav from '@/components/TopNav'
-import { useState } from 'react'
+import React from 'react'
+import { NextPage } from 'next'
 import axios from 'axios'
-import Tabs from '@/components/Tabs'
+import { EProtocolType, IFiles } from '@/pages/api/templates'
+import ProtocolItemList from '@/components/ProtocolItemList'
 
-const Home: NextPage = () => {
-    const [code, setCode] = useState(`Protocol: TLS_pw  # Bounded-verified
-# variant without client certificate
-# and using a guessable password to authenticate the client
-
-Types: Agent A,B,s;
-       Number NA,NB,Sid,PA,PB,PMS;
-       Function pk,hash,clientK,serverK,prf,pw
-
-Knowledge: 
-A: A,pk(s),B,hash,clientK,serverK,prf,pw(A,B);
-B: B,A,pk(B),pk(s),inv(pk(B)),{B,pk(B)}inv(pk(s)),hash,clientK,serverK,prf,pw(A,B)
-
-Actions:
-
-A->B: A,NA,Sid,PA
-B->A: NB,Sid,PB,{B,pk(B)}inv(pk(s))
-A->B: {PMS}pk(B),
-      hash(NB,B,PMS),
-      {|hash(prf(PMS,NA,NB),A,B,NA,NB,Sid,PA,PB,PMS),   pw(A,B)  |}
-        clientK(NA,NB,prf(PMS,NA,NB))
-B->A: {|hash(prf(PMS,NA,NB),A,B,NA,NB,Sid,PA,PB,PMS)|}
-        serverK(NA,NB,prf(PMS,NA,NB))
-Goals:
-
-B authenticates A on prf(PMS,NA,NB)
-A authenticates B on prf(PMS,NA,NB)
-prf(PMS,NA,NB) secret between A,B
-pw(A,B) guessable secret between A,B`)
-    const [result, setResult] = useState('')
-
-    const onSubmit = () => {
-        axios
-            .get('/api/execute')
-            .then((res) => setResult(res.data.message))
-            .catch((err) => console.error(err))
-    }
+type IProps = {
+    templates: IFiles[]
+}
+const Home: NextPage<IProps> = ({ templates }) => {
 
     return (
-        <div className="flex flex-col gap-6 overflow-y-hidden" style={{ height: '100vh' }}>
-            <Head>
-                <title>Ofmc</title>
-                <meta name="description" content="Ofmc web interface" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <TopNav />
-            <div className="flex gap-6 h-full p-12">
-                <CodeEditor code={code} onChange={(value) => setCode(value)} onSubmit={onSubmit} />
-                <div className="flex flex-col w-full">
-                    <Tabs
-                        tabs={[
-                            {
-                                key: '1',
-                                label: 'Raw output',
-                                content: (
-                                    <div className="w-full h-full text-white mt-4">{result}</div>
-                                ),
-                            },
-                            { key: '2', label: 'Simple' },
-                        ]}
-                    />
-                </div>
+        <div className='h-screen w-screen px-12'>
+            <div className='grid grid-cols-4 gap-8'>
+                <ProtocolItemList files={templates} type={EProtocolType.CLASSIC}/>
+                <ProtocolItemList files={templates} type={EProtocolType.SYMKEYNOTTP}/>
+                <ProtocolItemList files={templates} type={EProtocolType.AUTHCFF}/>
+                <ProtocolItemList files={templates} type={EProtocolType.PUBKEYNOTTP}/>
             </div>
-        </div>
-    )
+        </div>)
+
+}
+
+export const getStaticProps = async () => {
+    const res = await axios.get('http://localhost:3000/api/templates')
+    return { props: { templates: res.data } }
 }
 
 export default Home

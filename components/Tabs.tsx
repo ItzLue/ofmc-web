@@ -1,5 +1,5 @@
 import { NextPage } from 'next'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { ITab } from '../types/tabs'
 
 type IProps = {
@@ -10,11 +10,6 @@ type IProps = {
 
 const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab }) => {
     const [activeTab, setActiveTab] = useState(defaultTab ?? '1')
-    const activeTabRef = useRef<HTMLButtonElement>(null)
-
-    useEffect(() => {
-        console.log(activeTab)
-    }, [activeTab, setActiveTab])
 
     return (
         <div>
@@ -23,8 +18,8 @@ const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab }) => {
             >
                 {tabs.map((tab) => (
                     <button
-                        className={`flex-shrink-0 bg-transparent m-0 py-3 border-0 ${
-                            activeTab === tab.key ? 'font-medium underline' : ''
+                        className={`flex-shrink-0 bg-transparent m-0 p-3 border-0 ${
+                            activeTab === tab.key ? 'font-medium bg-[#1e1e1e]': ''
                         } ${
                             tab.disabled
                                 ? 'text-gray-200 font-normal cursor-default'
@@ -33,7 +28,6 @@ const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab }) => {
                         type="button"
                         onClick={() => setActiveTab(tab.key)}
                         key={tab.key}
-                        ref={tab.key === activeTab ? activeTabRef : undefined}
                         disabled={tab.disabled}
                     >
                         {tab.label}
