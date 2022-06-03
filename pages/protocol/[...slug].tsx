@@ -2,50 +2,52 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import CodeEditor from '@/components/CodeEditor'
 import TopNav from '@/components/TopNav'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Tabs from '@/components/Tabs'
 import Diagram from '@/components/Diagram'
 import Image from 'next/image'
 import { IFormattedOutput } from '../../types/formattedOutput'
 import { EAPICallstate } from '../../types/api'
+import { useRecoilValue } from 'recoil'
+import { userState } from '../../recoil/atoms/users'
+import { onCodeChange } from '../../helpers/firebase/protocols/on-code-change'
+import { useRouter } from 'next/router'
 
+// https://www.codementor.io/@johnnyb/fireedit-real-time-editor-javascript-firebase-59lnmf3c6
 const Home: NextPage = () => {
-    const [code, setCode] = useState(`Protocol: TLS_pw  # Bounded-verified
-# variant without client certificate
-# and using a guessable password to authenticate the client
+    const [code, setCode] = useState('')
 
-Types: Agent A,B,s;
-       Number NA,NB,Sid,PA,PB,PMS;
-       Function pk,hash,clientK,serverK,prf,pw
-
-Knowledge: 
-A: A,pk(s),B,hash,clientK,serverK,prf,pw(A,B);
-B: B,A,pk(B),pk(s),inv(pk(B)),{B,pk(B)}inv(pk(s)),hash,clientK,serverK,prf,pw(A,B)
-
-Actions:
-
-A->B: A,NA,Sid,PA
-B->A: NB,Sid,PB,{B,pk(B)}inv(pk(s))
-A->B: {PMS}pk(B),
-      hash(NB,B,PMS),
-      {|hash(prf(PMS,NA,NB),A,B,NA,NB,Sid,PA,PB,PMS),   pw(A,B)  |}
-        clientK(NA,NB,prf(PMS,NA,NB))
-B->A: {|hash(prf(PMS,NA,NB),A,B,NA,NB,Sid,PA,PB,PMS)|}
-        serverK(NA,NB,prf(PMS,NA,NB))
-Goals:
-
-B authenticates A on prf(PMS,NA,NB)
-A authenticates B on prf(PMS,NA,NB)
-prf(PMS,NA,NB) secret between A,B
-pw(A,B) guessable secret between A,B`)
+    const user = useRecoilValue(userState)
     const [result, setResult] = useState<{ parsed: IFormattedOutput, raw: string; attackTraceUrl: string, svg: string }>()
     const [callstate, setCallstate] = useState<EAPICallstate>(EAPICallstate.READY)
+    const [noUserModal, setNoUserModal] = useState(false)
+    const [protocolId, setProtocolId] = useState('')
+
+    const router = useRouter()
+
+
+    useEffect(() => {
+        const id = router.query.id as string
+        if (id && router.isReady) {
+            setProtocolId(id)
+            setCallstate(EAPICallstate.LOADING)
+            axios.get(`/api/protocols/${id}`).then(res => {
+                setCode(res.data.protocol.userCode || res.data.protocol.startingCode)
+            })
+        }
+    }, [protocolId, router.query.id, router.isReady])
 
     const onSubmit = () => {
         setCallstate(EAPICallstate.LOADING)
+
         axios
-            .get('/api/execute')
+            .post(`/api/protocols/run/${protocolId}`, { code },
+                {
+                    headers: {
+                        authorization: `Bearer ${user?.getIdTokenResult().then(idTokenResult => idTokenResult.token)}`,
+                    },
+                })
             .then((res) => {
                 setResult(res.data)
                 setCallstate(EAPICallstate.SUCCESS)
@@ -56,6 +58,13 @@ pw(A,B) guessable secret between A,B`)
             })
     }
 
+
+    useEffect(() => {
+        if (!user) {
+            setNoUserModal(true)
+        }
+    }, [])
+
     return (
         <div className='flex flex-col gap-6 overflow-y-hidden h-screen bg-primary'>
             <Head>
@@ -65,7 +74,7 @@ pw(A,B) guessable secret between A,B`)
             </Head>
             <TopNav />
             <div className='flex gap-6 h-full px-6'>
-                <CodeEditor code={code} onChange={(value) => setCode(value)} onSubmit={onSubmit} />
+                <CodeEditor code={code} onChange={value => onCodeChange(value, protocolId)} onSubmit={onSubmit} />
                 <div className='flex flex-col w-full'>
                     <Tabs
                         tabs={[
@@ -93,7 +102,7 @@ pw(A,B) guessable secret between A,B`)
                                         {result?.attackTraceUrl &&
                                             <div className='w-full h-full'>
                                                 <Image src={result.attackTraceUrl} alt='Picture of the author'
-                                                       layout='fixed' height={500} width={500}/>
+                                                       layout='fixed' height={500} width={500} />
                                             </div>}
                                     </div>
                                 ),
@@ -105,5 +114,6 @@ pw(A,B) guessable secret between A,B`)
         </div>
     )
 }
-{/*https://codesandbox.io/s/framer-motion-5-1-line-drawing-ph6ln?from-embed=&file=/src/App.js:895-1053  Draw svg cross*/}
+{/*https://codesandbox.io/s/framer-motion-5-1-line-drawing-ph6ln?from-embed=&file=/src/App.js:895-1053  Draw svg cross*/
+}
 export default Home

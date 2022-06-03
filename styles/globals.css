@@ -13,3 +13,7 @@ body {
 * {
     box-sizing: border-box;
 }
+
+input {
+    @apply border border-gray-500 px-1;
+}

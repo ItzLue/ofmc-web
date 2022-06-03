@@ -1,22 +1,21 @@
 import React from 'react'
-import { EProtocolType, getProtocolName, IFiles } from '@/pages/api/templates'
+import { EProtocolType, getProtocolName } from '@/pages/api/templates'
 import ProtocolItem from '@/components/ProtocolItem'
+import { IProtocol } from '../types/protocol'
 
 type IProps = {
-    files: IFiles[]
-    type: EProtocolType
+    files: IProtocol[]
 }
 
-const ProtocolItemList: React.FC<IProps> = ({ files, type }) => {
+const ProtocolItemList: React.FC<IProps> = ({ files }) => {
 
-    const filteredFiles = files.filter(file => file.type === type)
 
     return (
         <div className='flex flex-col gap-4 items-center'>
-            <h2 className='font-bold text-xl'>{getProtocolName(type)} {filteredFiles.filter((i) => i.isComplete).length} / {filteredFiles.length}</h2>
-            {filteredFiles.map((template) => (
-                <ProtocolItem name={template.name} urlSlug={template.urlSlug} isComplete={template.isComplete}
-                              key={template.id} />
+            <h2 className='font-bold text-xl'> {files.filter((i) => i.isComplete).length} / {files.length}</h2>
+            {files.map((file) => (
+                <ProtocolItem name={file.name} urlSlug={file.urlSlug} isComplete={file.isComplete}
+                              key={file.uid} uid={file.uid} />
             ))}
         </div>
     )

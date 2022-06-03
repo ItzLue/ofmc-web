@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import * as fs from 'fs'
 import { faker } from '@faker-js/faker'
+import { IProtocol } from '../../../types/protocol'
+import { readAllProtocols } from '../../../helpers/firebase/protocols/create-new-protocol'
 
 export enum EProtocolType {
     SYMKEYNOTTP,
@@ -25,21 +27,13 @@ export const getProtocolName = (protocol: EProtocolType) => {
     return map.get(protocol)
 }
 
-export type IFiles = {
-    id: number
-    name: string
-    urlSlug: string
-    type: EProtocolType
-    attackTraceUrl?: string
-    isComplete: boolean
-}
 
-
-export const protocols: IFiles[] = faker.datatype.array((30)).map((_, index) => {
+export const protocols: IProtocol[] = faker.datatype.array((30)).map((_, index) => {
     const name = faker.name.firstName() + ' ' + faker.name.lastName()
     return {
-        id: index,
+        uid: index.toString(),
         name,
+        downloadUrl: faker.internet.url(),
         urlSlug: faker.helpers.slugify(name),
         type: faker.datatype.number({ min: 0, max: 6 }),
         attackTraceUrl: faker.internet.url(),
