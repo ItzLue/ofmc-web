@@ -21,21 +21,19 @@ const handle = async (req: NextApiRequest, res: NextApiResponse) => {
         const db = getDatabase()
         const protocolsRef = ref(db, 'protocols')
         return get(protocolsRef).then((snapshot) => {
-                const protocols = snapshot.val()
-                const result: IProtocol[] = []
-                for (let i in protocols) {
-                    result.push({ ...protocols[i], uid: i })
-                }
-                return res.status(200).json({ protocols: result })
-            },
-        )
+            const protocols = snapshot.val()
+            const result: IProtocol[] = []
+            for (let i in protocols) {
+                result.push({ ...protocols[i], uid: i })
+            }
+            return res.status(200).json({ protocols: result })
+        })
     } else {
         return res.status(500).json({ message: 'Method not allowed' })
     }
 }
 
 export default handle
-
 
 const defaultStartingCode = `Protocol: TLS_pw  # Bounded-verified
 # variant without client certificate

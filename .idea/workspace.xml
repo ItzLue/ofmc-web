@@ -2,37 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="154498ed-4852-405b-aa13-8c547169b2b8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/helpers/firebase/create-new-user.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/helpers/firebase/firebase.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/helpers/firebase/protocols/create-new-protocol.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/helpers/firebase/protocols/on-code-change.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/helpers/firebase/user/read-single-user.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ofmc/user-created/1654256289400.AnB" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ofmc/user-created/1654264596806.AnB" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/api/protocols/[id].ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/api/protocols/run/[id].ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recoil/atoms/protocol.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recoil/atoms/users.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/types/protocol.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/types/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/Hero.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Modal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Modal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ProtocolItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProtocolItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/CodeEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/CodeEditor.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ProtocolItemList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProtocolItemList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/TopNav.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/TopNav.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers/firebase.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers/supabaseClient.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/_app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/_app.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/api/execute.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/api/templates/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/templates/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/api/upload.ts" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/protocols/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/protocols/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/protocols/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/protocols/run/[id].ts" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/protocols/run/[id].ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/protocol/[...slug].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/protocol/[...slug].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/globals.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -76,7 +53,7 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/loui/Documents/GitHub/ofmc-web/node_modules/prettier&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.prettier&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -171,6 +148,9 @@
       <workItem from="1654155684672" duration="206000" />
       <workItem from="1654155911239" duration="40651000" />
       <workItem from="1654239103735" duration="25001000" />
+      <workItem from="1654327989328" duration="479000" />
+      <workItem from="1654594453849" duration="1282000" />
+      <workItem from="1654601332860" duration="321000" />
     </task>
     <servers />
   </component>

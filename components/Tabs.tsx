@@ -19,7 +19,7 @@ const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab }) => {
                 {tabs.map((tab) => (
                     <button
                         className={`flex-shrink-0 bg-transparent m-0 p-3 border-0 ${
-                            activeTab === tab.key ? 'font-medium bg-[#1e1e1e]': ''
+                            activeTab === tab.key ? 'font-medium bg-[#1e1e1e]' : ''
                         } ${
                             tab.disabled
                                 ? 'text-gray-200 font-normal cursor-default'

@@ -13,7 +13,6 @@ type IProps = {
 }
 
 const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
-
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
     const uploadRef = useRef(null)
@@ -24,34 +23,39 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
         const reader = new FileReader()
         reader.onload = async (e: any) => {
             onChange(e.target.result)
-
         }
         reader.readAsText(file)
     }
 
     return (
-        <div className='w-full h-full'>
-            <div
-                className='flex flex-row-reverse bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white'>
-                <button className='p-2 bg-blue-700 rounded-tr-lg' type='button' onClick={onSubmit}>
+        <div className="w-full h-full">
+            <div className="flex flex-row-reverse bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white">
+                <button className="p-2 bg-blue-700 rounded-tr-lg" type="button" onClick={onSubmit}>
                     Run code
                 </button>
-                <AiOutlineReload className='h-4 w-4 hover:cursor-pointer' />
+                <AiOutlineReload className="h-4 w-4 hover:cursor-pointer" />
                 <div>
-                    <VisuallyHidden
-                        className='relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content'>
-                        <input type='file' id='file' accept='.AnB' onChange={handleFileUpload} ref={uploadRef} />
+                    <VisuallyHidden className="relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content">
+                        <input
+                            type="file"
+                            id="file"
+                            accept=".AnB"
+                            onChange={handleFileUpload}
+                            ref={uploadRef}
+                        />
                     </VisuallyHidden>
-                    <label htmlFor='file' className='cursor-pointer'>
-                        <FiUpload className='h-4 w-4' />
+                    <label htmlFor="file" className="cursor-pointer">
+                        <FiUpload className="h-4 w-4" />
                     </label>
                 </div>
-                <button type='button' onClick={() => setIsSettingsOpen(true)}>Open settings</button>
+                <button type="button" onClick={() => setIsSettingsOpen(true)}>
+                    Open settings
+                </button>
             </div>
             <Editor
-                theme='vs-dark'
+                theme="vs-dark"
                 value={code}
-                height='100%'
+                height="100%"
                 onChange={(value) => onChange(value || '')}
                 options={{
                     minimap: {
@@ -61,7 +65,7 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
                     wordWrap: 'on',
                 }}
             />
-            <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}/>
+            <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
         </div>
     )
 }
