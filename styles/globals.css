@@ -17,3 +17,9 @@ body {
 input {
     @apply border border-gray-500 px-1;
 }
+
+line {
+    color: white;
+    fill: white;
+    stroke: white;
+}

@@ -1,18 +1,15 @@
 import React, { Fragment, useState } from 'react'
 import { NextPage } from 'next'
 import axios from 'axios'
-import { EProtocolType } from '@/pages/api/templates'
 import ProtocolItemList from '@/components/ProtocolItemList'
-import { browserSessionPersistence, GithubAuthProvider, setPersistence, signInWithPopup } from '@firebase/auth'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userState } from '../recoil/atoms/users'
 import { ICreateProtocol, IProtocol } from '../types/protocol'
-import { auth, provider } from '../helpers/firebase/firebase'
-import writeNewUser from '../helpers/firebase/create-new-user'
 import { Dialog, Transition } from '@headlessui/react'
 import Modal from '@/components/Modal'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
+import Hero from '@/components/Hero'
 
 
 type IProps = {
@@ -20,30 +17,12 @@ type IProps = {
 }
 
 const Home: NextPage<IProps> = ({ templates }) => {
-    const [user, setUser] = useRecoilState(userState)
+    const user = useRecoilValue(userState)
     const [isOpen, setIsOpen] = useState(false)
 
     const { register, handleSubmit } = useForm<ICreateProtocol>()
 
     const router = useRouter()
-
-    const onSignIn = async () => {
-        await setPersistence(auth, browserSessionPersistence)
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const user = result.user
-                writeNewUser(user)
-                setUser(user)
-            }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code
-            const errorMessage = error.message
-            // The email of the user's account used.
-            const email = error.customData.email
-            // The AuthCredential type that was used.
-            const credential = GithubAuthProvider.credentialFromError(error)
-        })
-    }
 
     const onSubmit: SubmitHandler<ICreateProtocol> = (data) => {
         axios.post('/api/protocols', { ...data, userId: user?.uid })
@@ -59,14 +38,9 @@ const Home: NextPage<IProps> = ({ templates }) => {
 
 
     return (
-        <div className='h-screen w-screen px-12'>
-            {!user && <button className='text-blue-500' onClick={onSignIn}>Sign in to Github</button>}
-            {user && (
-                <div className='flex justify-center text-white w-full'>
-                    <button className='bg-blue-800 p-4 rounded-lg' onClick={() => setIsOpen(true)}>Create protocol
-                    </button>
-                </div>
-            )}
+        <div className='h-screen w-screen'>
+            <Hero/>
+            <main className='px-12'>
             <div className='grid grid-cols-4 gap-8'>
                 <ProtocolItemList files={templates} />
                 <ProtocolItemList files={templates} />
@@ -118,6 +92,7 @@ const Home: NextPage<IProps> = ({ templates }) => {
                     </div>
                 </div>
             </Modal>}
+            </main>
         </div>)
 
 }

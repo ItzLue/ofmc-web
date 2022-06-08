@@ -118,17 +118,18 @@ const Home: NextPage = () => {
                                 label: 'Diagram',
                                 content: (
                                     <div className="text-white overflow-auto h-screen bg-vs-code flex items-center">
-                                        {result?.attackTraceUrl && (
+
                                             <div className="w-full h-full">
                                                 <Image
-                                                    src={result.attackTraceUrl}
+                                                    className='text-white'
+                                                    src='/attacktrace.svg'
                                                     alt="Picture of the author"
                                                     layout="fixed"
                                                     height={500}
                                                     width={500}
                                                 />
                                             </div>
-                                        )}
+
                                     </div>
                                 ),
                             },
