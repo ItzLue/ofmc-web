@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import { useState } from 'react'
-import { ITab } from '../types/tabs'
+import { ITab } from '@/types/tabs'
 
 type IProps = {
     className?: string

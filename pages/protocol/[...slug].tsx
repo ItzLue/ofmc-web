@@ -56,7 +56,7 @@ const Home: NextPage = () => {
                             ?.getIdTokenResult()
                             .then((idTokenResult) => idTokenResult.token)}`,
                     },
-                }
+                },
             )
             .then((res) => {
                 setResult(res.data)
@@ -75,40 +75,40 @@ const Home: NextPage = () => {
     }, [user])
 
     return (
-        <div className="flex flex-col gap-6 overflow-y-hidden h-screen bg-primary">
+        <div className='flex flex-col gap-6 overflow-y-hidden h-screen bg-primary'>
             <Head>
                 <title>Ofmc</title>
-                <meta name="description" content="Ofmc web interface" />
-                <link rel="icon" href="/favicon.ico" />
+                <meta name='description' content='Ofmc web interface' />
+                <link rel='icon' href='/favicon.ico' />
             </Head>
             <TopNav />
-            <div className="flex gap-6 h-full px-6">
+            <div className='flex gap-6 h-full px-6'>
                 <CodeEditor
                     code={code}
                     onChange={(value) => onCodeChange(value, protocolId)}
                     onSubmit={onSubmit}
                 />
-                <div className="flex flex-col w-full">
+                <div className='flex flex-col w-full'>
                     <Tabs
                         tabs={[
                             {
                                 key: '1',
                                 label: 'Simplified',
                                 content: (
-                                    <div className="w-full h-screen text-white bg-vs-code"></div>
+                                    <div className='w-full h-screen text-white bg-vs-code'></div>
                                 ),
                             },
                             {
                                 key: '2',
                                 label: 'Raw output',
                                 content: (
-                                    <div className="text-white overflow-auto h-screen bg-vs-code">
+                                    <div className='text-white overflow-auto h-screen bg-vs-code'>
                                         {result?.raw.split('\n').map((line, i) =>
                                             line ? (
-                                                <div className="pl-2" key={i}>
+                                                <div className='pl-2' key={i}>
                                                     {line}
                                                 </div>
-                                            ) : null
+                                            ) : null,
                                         )}
                                     </div>
                                 ),
@@ -117,16 +117,16 @@ const Home: NextPage = () => {
                                 key: '3',
                                 label: 'Diagram',
                                 content: (
-                                    <div className="text-white overflow-auto h-screen bg-vs-code flex items-center">
-                                        <div className="w-full h-full flex justify-items-center">
-                                            <Image
-                                                className="fill-white stroke-white"
-                                                src="/attacktrace.svg"
-                                                alt="Picture of the author"
-                                                layout="fixed"
-                                                width="900"
-                                                height="600"
-                                            />
+                                    <div className='text-white overflow-auto h-screen bg-vs-code flex items-center'>
+                                        <div className='w-full h-full flex justify-center'>
+                                            {result?.svg && <Image
+                                                className='fill-white stroke-white'
+                                                src={`data:image/svg+xml;utf8,${result.svg}`}
+                                                alt='Picture of the author'
+                                                layout='fixed'
+                                                width='900'
+                                                height='600'
+                                            />}
                                         </div>
                                     </div>
                                 ),

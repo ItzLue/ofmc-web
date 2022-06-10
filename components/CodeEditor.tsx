@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Editor from '@monaco-editor/react'
-import { FiUpload, FiDownload } from 'react-icons/fi'
+import { FiUpload, FiDownload, FiSettings } from 'react-icons/fi'
 import { VisuallyHidden } from 'react-aria'
 import OfmcSettingsModal from '@/components/Modals/OfmcSettingsModal'
 import { Monaco } from '@monaco-editor/loader'
@@ -57,16 +57,16 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
 
         // Define a new theme that contains only rules that match this language
         monaco.editor.defineTheme('AnBTheme', {
-            base: 'vs',
-            inherit: false,
+            base: 'vs-dark',
+            inherit: true,
             rules: [
-                { token: 'keywords', foreground: '808080' },
+                { token: 'keywords', foreground: '#0025FF14' },
                 { token: 'constants', foreground: 'ff0000', fontStyle: 'bold' },
                 { token: 'builtinfunctions', foreground: 'FFA500' },
                 { token: 'constantsNumerics', foreground: '008800' },
             ],
             colors: {
-                'editor.foreground': '#1E1E1E',
+                'editor.foreground': '#ffffff',
             },
         })
     }
@@ -92,9 +92,7 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
                     </label>
                 </div>
                 <FiDownload className="h-4 w-4" onClick={handleFileDownload} />
-                <button type="button" onClick={() => setIsSettingsOpen(true)}>
-                    Open settings
-                </button>
+                <FiSettings onClick={() => setIsSettingsOpen(true)} className='w-4 h-4 cursor-pointer'/>
             </div>
             <Editor
                 theme="AnBTheme"

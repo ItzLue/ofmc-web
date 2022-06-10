@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { get, getDatabase, ref } from '@firebase/database'
 import slugify from 'slugify'
-import { writeNewProtocol } from '../../../helpers/firebase/protocols/create-new-protocol'
-import { IProtocol } from '../../../types/protocol'
+import { writeNewProtocol } from '@/helpers/firebase/protocols/create-new-protocol'
+import { IProtocol } from '@/types/protocol'
 
 const defaultStartingCode = `Protocol: TLS_pw  # Bounded-verified
 # variant without client certificate
@@ -47,14 +47,16 @@ const handle = async (req: NextApiRequest, res: NextApiResponse) => {
         writeNewProtocol(protocol, req.body.userId)
         res.status(200).json({ protocol })
     } else if (req.method === 'GET') {
-        const userId = req.query.userId
+        const { userId } = req.query
         const db = getDatabase()
         const protocolsRef = ref(db, 'protocols')
         return get(protocolsRef).then((snapshot) => {
-            const protocols = snapshot.val()
+            const protocols: IProtocol[] = snapshot.val()
             const result: IProtocol[] = []
             for (let i in protocols) {
+                if (protocols[i].userId === userId) { //TODO Quickfix to get users protocols
                 result.push({ ...protocols[i], uid: i })
+                }
             }
             return res.status(200).json({ protocols: result })
         })

@@ -1,27 +1,23 @@
-import React from 'react'
-import { IAttackTrace, IFormattedOutput } from '../types/formattedOutput'
+import Image from 'next/image'
+import { NextPage } from 'next'
+import parseSvg from '@/helpers/parseSvg'
 
 type IProps = {
-    attackTrace: IAttackTrace[];
+    svg: string
 }
 
-const createStep = (attackTrace: IAttackTrace) => {
+const Diagram: NextPage<IProps> = ({svg}) => {
+
+    const formattedSVG = parseSvg(svg)
 
     return (
-        <>
-            <text className='fill-white' x={0} style={{ fontSize: '2px' }}>{attackTrace.from}</text>
-            <line x1={10} y1={0} x2={10} y2='100%' stroke='white' />
-        </>
+        <Image
+            src={`data:image/svg+xml;utf8,${formattedSVG}`}
+            alt='Attack trace diagram'
+            layout='fixed'
+            width='900'
+            height='600'
+        />
     )
 }
-
-const Diagram: React.FC<IProps> = ({ attackTrace }) => {
-
-    return (
-        <svg viewBox='0 0 100 100' height='100%' width='100%'>
-            {createStep(attackTrace[0])}
-        </svg>)
-
-}
-
 export default Diagram

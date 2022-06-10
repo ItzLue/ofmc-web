@@ -7,13 +7,20 @@ import {
     signInWithPopup,
 } from '@firebase/auth'
 import { useRecoilState } from 'recoil'
-import { auth, provider } from '../helpers/firebase/firebase'
+import { auth, provider } from '@/helpers/firebase/firebase'
 import { userState } from '../recoil/atoms/users'
 import writeNewUser from '../helpers/firebase/create-new-user'
 import Image from 'next/image'
 import Infobox from '@/components/Infobox'
 
-const Hero: NextPage = () => {
+
+type IProps = {
+    totalCompleted: number
+    userCreatedProtocols: number
+    mostCompletedType: string
+}
+
+const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreatedProtocols }) => {
     const [user, setUser] = useRecoilState(userState)
 
     const onSignIn = async () => {
@@ -36,32 +43,41 @@ const Hero: NextPage = () => {
     }
 
     const userStats = (
-        <div className="flex items-center gap-4 h-full w-full justify-between px-12">
+        <div className='flex items-center gap-4 h-full w-full justify-between px-12'>
             <Infobox>
-                <div>{user?.displayName}</div>
+                <div className='flex flex-col text-center'>
+                    <span>Created protocols</span>
+                    <span className='font-bold text-lg'>{userCreatedProtocols}</span>
+                </div>
             </Infobox>
 
             <Infobox>
-                <div>{user?.displayName}</div>
+                <div className='flex flex-col text-center'>
+                    <span>Total completed</span>
+                    <span className='font-bold text-lg'>{totalCompleted}</span>
+                </div>
             </Infobox>
 
             <Infobox>
-                <div>{user?.displayName}</div>
+                <div className='flex flex-col text-center'>
+                    <span>Most completed type</span>
+                    <span className='font-bold text-lg'>{mostCompletedType}</span>
+                </div>
             </Infobox>
         </div>
     )
 
     return (
-        <div className="bg-gradient-to-r from-[#ADC9FB] h-1/3">
-            <div className="flex flex-row-reverse">
+        <div className='bg-gradient-to-r from-[#ADC9FB] h-1/3'>
+            <div className='flex flex-row-reverse'>
                 {user && (
-                    <div className="flex inline-flex gap-2 mt-4 mr-4">
-                        <p className="font-medium">{user.displayName}</p>
+                    <div className='flex inline-flex gap-2 mt-4 mr-4'>
+                        <p className='font-medium'>{user.displayName}</p>
                         {user.photoURL && (
                             <Image
-                                className="rounded-full"
+                                className='rounded-full'
                                 src={user.photoURL}
-                                layout="fixed"
+                                layout='fixed'
                                 height={24}
                                 width={24}
                             />
@@ -72,7 +88,7 @@ const Hero: NextPage = () => {
             {user ? (
                 userStats
             ) : (
-                <div className="text-center h-full w-full">
+                <div className='text-center h-full w-full'>
                     <button onClick={onSignIn}>Please login to see stats</button>
                 </div>
             )}

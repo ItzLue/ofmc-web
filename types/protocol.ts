@@ -11,6 +11,7 @@ export type IProtocol = {
     log?: string
     attackTraceUrl?: string
     userId?: string
+    isTemplate?: boolean
 }
 
 export type ICreateProtocol = {
