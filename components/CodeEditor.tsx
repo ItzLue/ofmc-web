@@ -1,10 +1,10 @@
-import React, { Fragment, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Editor from '@monaco-editor/react'
-import { AiOutlineReload } from 'react-icons/ai'
-import { FiUpload } from 'react-icons/fi'
+import { FiUpload, FiDownload } from 'react-icons/fi'
 import { VisuallyHidden } from 'react-aria'
-import Modal from '@/components/Modal'
+import OfmcSettingsModal from '@/components/Modals/OfmcSettingsModal'
+import { Monaco } from '@monaco-editor/loader'
 
 type IProps = {
     code: string
@@ -16,6 +16,7 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
     const uploadRef = useRef(null)
+
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.[0]) return
         const file = e.target.files[0]
@@ -27,13 +28,55 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
         reader.readAsText(file)
     }
 
+    const handleFileDownload = () => {
+        const blob = new Blob([code], { type: 'text/plain' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'code.AnB'
+        link.click()
+    }
+
+    const setupAnB = (monaco: Monaco) => {
+        monaco.languages.register({ id: 'AnB' })
+
+        // Register a tokens provider for the language
+        monaco.languages.setMonarchTokensProvider('AnB', {
+            tokenizer: {
+                root: [
+                    [
+                        /(Protocol|Types|Agent|Number|Function|Symmetric_key|PublicKey|Knowledge|where|Actions|Goals|authenticates|on|secrecy|of|secret|between)(:?)/,
+                        'keywords',
+                    ],
+                    [/[a-z][a-zA-Z0-9_]*|[0-9]*/, 'constants'],
+                    [/(exp|inv)/, 'builtinfunctions'],
+                    [/\\b[A-Z_][a-zA-Z0-9_]*/, 'constantsNumerics'],
+                ],
+            },
+        })
+
+        // Define a new theme that contains only rules that match this language
+        monaco.editor.defineTheme('AnBTheme', {
+            base: 'vs',
+            inherit: false,
+            rules: [
+                { token: 'keywords', foreground: '808080' },
+                { token: 'constants', foreground: 'ff0000', fontStyle: 'bold' },
+                { token: 'builtinfunctions', foreground: 'FFA500' },
+                { token: 'constantsNumerics', foreground: '008800' },
+            ],
+            colors: {
+                'editor.foreground': '#1E1E1E',
+            },
+        })
+    }
+
     return (
         <div className="w-full h-full">
             <div className="flex flex-row-reverse bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white">
                 <button className="p-2 bg-blue-700 rounded-tr-lg" type="button" onClick={onSubmit}>
                     Run code
                 </button>
-                <AiOutlineReload className="h-4 w-4 hover:cursor-pointer" />
                 <div>
                     <VisuallyHidden className="relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content">
                         <input
@@ -48,14 +91,16 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
                         <FiUpload className="h-4 w-4" />
                     </label>
                 </div>
+                <FiDownload className="h-4 w-4" onClick={handleFileDownload} />
                 <button type="button" onClick={() => setIsSettingsOpen(true)}>
                     Open settings
                 </button>
             </div>
             <Editor
-                theme="vs-dark"
+                theme="AnBTheme"
                 value={code}
                 height="100%"
+                language="AnB"
                 onChange={(value) => onChange(value || '')}
                 options={{
                     minimap: {
@@ -64,8 +109,9 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
                     fontSize: 14,
                     wordWrap: 'on',
                 }}
+                beforeMount={setupAnB}
             />
-            <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+            <OfmcSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
         </div>
     )
 }

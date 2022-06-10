@@ -1,39 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import { NextApiRequest, NextApiResponse } from 'next'
-import writeNewProtocol from '../../../helpers/firebase/protocols/create-new-protocol'
-import { IProtocol } from '../../../types/protocol'
-import slugify from 'slugify'
 import { get, getDatabase, ref } from '@firebase/database'
-
-const handle = async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === 'POST') {
-        const protocol: IProtocol = {
-            isComplete: false,
-            urlSlug: slugify(req.body.name),
-            uid: uuidv4().toString(),
-            name: req.body.name,
-            type: req.body.type,
-            startingCode: defaultStartingCode,
-        }
-        writeNewProtocol(protocol, req.body.userId)
-        res.status(200).json({ protocol })
-    } else if (req.method === 'GET') {
-        const db = getDatabase()
-        const protocolsRef = ref(db, 'protocols')
-        return get(protocolsRef).then((snapshot) => {
-            const protocols = snapshot.val()
-            const result: IProtocol[] = []
-            for (let i in protocols) {
-                result.push({ ...protocols[i], uid: i })
-            }
-            return res.status(200).json({ protocols: result })
-        })
-    } else {
-        return res.status(500).json({ message: 'Method not allowed' })
-    }
-}
-
-export default handle
+import slugify from 'slugify'
+import { writeNewProtocol } from '../../../helpers/firebase/protocols/create-new-protocol'
+import { IProtocol } from '../../../types/protocol'
 
 const defaultStartingCode = `Protocol: TLS_pw  # Bounded-verified
 # variant without client certificate
@@ -63,3 +33,34 @@ B authenticates A on prf(PMS,NA,NB)
 A authenticates B on prf(PMS,NA,NB)
 prf(PMS,NA,NB) secret between A,B
 pw(A,B) guessable secret between A,B`
+
+const handle = async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method === 'POST') {
+        const protocol: IProtocol = {
+            isComplete: false,
+            urlSlug: slugify(req.body.name),
+            uid: uuidv4().toString(),
+            name: req.body.name,
+            type: req.body.type,
+            startingCode: defaultStartingCode,
+        }
+        writeNewProtocol(protocol, req.body.userId)
+        res.status(200).json({ protocol })
+    } else if (req.method === 'GET') {
+        const userId = req.query.userId
+        const db = getDatabase()
+        const protocolsRef = ref(db, 'protocols')
+        return get(protocolsRef).then((snapshot) => {
+            const protocols = snapshot.val()
+            const result: IProtocol[] = []
+            for (let i in protocols) {
+                result.push({ ...protocols[i], uid: i })
+            }
+            return res.status(200).json({ protocols: result })
+        })
+    } else {
+        return res.status(500).json({ message: 'Method not allowed' })
+    }
+}
+
+export default handle

@@ -8,10 +8,11 @@ import Tabs from '@/components/Tabs'
 import Image from 'next/image'
 import { useRecoilValue } from 'recoil'
 import { useRouter } from 'next/router'
-import { IFormattedOutput } from '../../types/formattedOutput'
-import { EAPICallstate } from '../../types/api'
+import { IFormattedOutput } from '@/types/formattedOutput'
+import { EAPICallstate } from '@/types/api'
+import onCodeChange from '../../helpers/firebase/protocols/on-code-change'
+import ofmcSettingsState from '../../recoil/atoms/ofmcSettings'
 import { userState } from '../../recoil/atoms/users'
-import { onCodeChange } from '../../helpers/firebase/protocols/on-code-change'
 
 // https://www.codementor.io/@johnnyb/fireedit-real-time-editor-javascript-firebase-59lnmf3c6
 const Home: NextPage = () => {
@@ -27,6 +28,7 @@ const Home: NextPage = () => {
     const [callstate, setCallstate] = useState<EAPICallstate>(EAPICallstate.READY)
     const [noUserModal, setNoUserModal] = useState(false)
     const [protocolId, setProtocolId] = useState('')
+    const ofmcSettings = useRecoilValue(ofmcSettingsState)
 
     const router = useRouter()
 
@@ -47,7 +49,7 @@ const Home: NextPage = () => {
         axios
             .post(
                 `/api/protocols/run/${protocolId}`,
-                { code },
+                { code, settings: ofmcSettings },
                 {
                     headers: {
                         authorization: `Bearer ${user
@@ -93,9 +95,7 @@ const Home: NextPage = () => {
                                 key: '1',
                                 label: 'Simplified',
                                 content: (
-                                    <div className="w-full h-screen text-white bg-vs-code">
-                                        {result?.parsed.goal}
-                                    </div>
+                                    <div className="w-full h-screen text-white bg-vs-code"></div>
                                 ),
                             },
                             {
@@ -118,18 +118,16 @@ const Home: NextPage = () => {
                                 label: 'Diagram',
                                 content: (
                                     <div className="text-white overflow-auto h-screen bg-vs-code flex items-center">
-
-                                            <div className="w-full h-full">
-                                                <Image
-                                                    className='text-white'
-                                                    src='/attacktrace.svg'
-                                                    alt="Picture of the author"
-                                                    layout="fixed"
-                                                    height={500}
-                                                    width={500}
-                                                />
-                                            </div>
-
+                                        <div className="w-full h-full flex justify-items-center">
+                                            <Image
+                                                className="fill-white stroke-white"
+                                                src="/attacktrace.svg"
+                                                alt="Picture of the author"
+                                                layout="fixed"
+                                                width="900"
+                                                height="600"
+                                            />
+                                        </div>
                                     </div>
                                 ),
                             },
