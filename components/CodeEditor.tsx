@@ -73,26 +73,38 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
 
     return (
         <div className="w-full h-full">
-            <div className="flex flex-row-reverse bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white">
-                <button className="p-2 bg-blue-700 rounded-tr-lg" type="button" onClick={onSubmit}>
-                    Run code
-                </button>
-                <div>
-                    <VisuallyHidden className="relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content">
-                        <input
-                            type="file"
-                            id="file"
-                            accept=".AnB"
-                            onChange={handleFileUpload}
-                            ref={uploadRef}
-                        />
-                    </VisuallyHidden>
-                    <label htmlFor="file" className="cursor-pointer">
-                        <FiUpload className="h-4 w-4" />
-                    </label>
+            <div className="flex justify-between bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white">
+                <div className="ml-4">
+                    <span>Name of protocol</span>
                 </div>
-                <FiDownload className="h-4 w-4" onClick={handleFileDownload} />
-                <FiSettings onClick={() => setIsSettingsOpen(true)} className='w-4 h-4 cursor-pointer'/>
+                <div className="flex flex-row-reverse items-center gap-4">
+                    <button
+                        className="p-2 bg-blue-700 rounded-tr-lg"
+                        type="button"
+                        onClick={onSubmit}
+                    >
+                        Run code
+                    </button>
+                    <div>
+                        <VisuallyHidden className="relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content">
+                            <input
+                                type="file"
+                                id="file"
+                                accept=".AnB"
+                                onChange={handleFileUpload}
+                                ref={uploadRef}
+                            />
+                        </VisuallyHidden>
+                        <label htmlFor="file" className="cursor-pointer">
+                            <FiUpload className="h-4 w-4" />
+                        </label>
+                    </div>
+                    <FiDownload className="h-4 w-4" onClick={handleFileDownload} />
+                    <FiSettings
+                        onClick={() => setIsSettingsOpen(true)}
+                        className="w-4 h-4 cursor-pointer"
+                    />
+                </div>
             </div>
             <Editor
                 theme="AnBTheme"

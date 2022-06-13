@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { IProtocol } from '../../types/protocol'
+import { IProtocol } from '@/types/protocol'
 
 const protocolState = atom<IProtocol | null>({
     key: 'protocolState',
