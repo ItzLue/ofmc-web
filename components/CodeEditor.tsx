@@ -44,13 +44,11 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
         monaco.languages.setMonarchTokensProvider('AnB', {
             tokenizer: {
                 root: [
-                    [
-                        /(Protocol|Types|Agent|Number|Function|Symmetric_key|PublicKey|Knowledge|where|Actions|Goals|authenticates|on|secrecy|of|secret|between)(:?)/,
-                        'keywords',
-                    ],
-                    [/[a-z][a-zA-Z0-9_]*|[0-9]*/, 'constants'],
-                    [/(exp|inv)/, 'builtinfunctions'],
-                    [/\\b[A-Z_][a-zA-Z0-9_]*/, 'constantsNumerics'],
+                    [/(Protocol|Types|Agent|Number|Function|Symmetric_key|PublicKey|Knowledge|where|Actions|Goals|authenticates|on|secrecy|of|secret|between)(:?)/g, 'keywords',],
+                    //[/[a-zA-Z]\w*|\d/, 'constants'],
+                    [/(exp|inv|hash)/g, 'builtinfunctions'],
+                    [/\\b[A-Z_][a-zA-Z0-9_]*/g, 'constantsNumerics'],
+                    [/->/g, 'arrow'],
                 ],
             },
         })
@@ -60,10 +58,11 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
             base: 'vs-dark',
             inherit: true,
             rules: [
-                { token: 'keywords', foreground: '#0025FF14' },
+                { token: 'keywords', foreground: '#4BE15C14' },
                 { token: 'constants', foreground: 'ff0000', fontStyle: 'bold' },
                 { token: 'builtinfunctions', foreground: 'FFA500' },
                 { token: 'constantsNumerics', foreground: '008800' },
+                { token: 'arrow', foreground: '#FF000014' },
             ],
             colors: {
                 'editor.foreground': '#ffffff',
@@ -72,45 +71,47 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit }) => {
     }
 
     return (
-        <div className="w-full h-full">
-            <div className="flex justify-between bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white">
-                <div className="ml-4">
+        <div className='w-full h-full'>
+            <div
+                className='flex justify-between bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white'>
+                <div className='ml-4'>
                     <span>Name of protocol</span>
                 </div>
-                <div className="flex flex-row-reverse items-center gap-4">
+                <div className='flex flex-row-reverse items-center gap-4'>
                     <button
-                        className="p-2 bg-blue-700 rounded-tr-lg"
-                        type="button"
+                        className='p-2 bg-blue-700 rounded-tr-lg'
+                        type='button'
                         onClick={onSubmit}
                     >
                         Run code
                     </button>
                     <div>
-                        <VisuallyHidden className="relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content">
+                        <VisuallyHidden
+                            className='relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content'>
                             <input
-                                type="file"
-                                id="file"
-                                accept=".AnB"
+                                type='file'
+                                id='file'
+                                accept='.AnB'
                                 onChange={handleFileUpload}
                                 ref={uploadRef}
                             />
                         </VisuallyHidden>
-                        <label htmlFor="file" className="cursor-pointer">
-                            <FiUpload className="h-4 w-4" />
+                        <label htmlFor='file' className='cursor-pointer'>
+                            <FiUpload className='h-4 w-4' />
                         </label>
                     </div>
-                    <FiDownload className="h-4 w-4" onClick={handleFileDownload} />
+                    <FiDownload className='h-4 w-4' onClick={handleFileDownload} />
                     <FiSettings
                         onClick={() => setIsSettingsOpen(true)}
-                        className="w-4 h-4 cursor-pointer"
+                        className='w-4 h-4 cursor-pointer'
                     />
                 </div>
             </div>
             <Editor
-                theme="AnBTheme"
+                theme='AnBTheme'
                 value={code}
-                height="100%"
-                language="AnB"
+                height='100%'
+                language='AnB'
                 onChange={(value) => onChange(value || '')}
                 options={{
                     minimap: {

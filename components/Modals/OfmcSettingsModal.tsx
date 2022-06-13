@@ -16,7 +16,7 @@ type IProps = {
 }
 const OfmcSettingsModal: React.FC<IProps> = ({ isOpen, onClose }) => {
     const { register, handleSubmit } = useForm<IOFMCSettings>({
-        defaultValues: { numSess: 2, depth: 5 },
+        defaultValues: { numSess: 2, depth: 0 },
     })
     const setOfmcSettings = useSetRecoilState(ofmcSettingsState)
 
@@ -54,9 +54,9 @@ const OfmcSettingsModal: React.FC<IProps> = ({ isOpen, onClose }) => {
                                     {...register('numSess')}
                                 />
 
-                                <label htmlFor='depth'>Depth</label>
+                                <label htmlFor='depth'>Depth (0 for infinite)</label>
                                 <input
-                                    defaultValue={12}
+                                    defaultValue={0}
                                     type='number'
                                     min={1}
                                     {...register('depth')}

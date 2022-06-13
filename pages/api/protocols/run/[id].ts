@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import * as fs from 'fs'
-import { get, getDatabase, ref as dbref } from '@firebase/database'
+import { child, get, getDatabase, ref as dbref, update } from '@firebase/database'
 import parseOfmcOutput from '../../../../helpers/server/parseOfmcOutput'
 import { getDownloadURL, getStorage, ref } from '@firebase/storage'
 import { uploadBytesResumable } from '@firebase/storage'
+import parseSvg from '@/helpers/parseSvg'
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
@@ -25,19 +26,25 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
             fs.writeFile(`./ofmc/user-created/${id}.AnB`, code, (err) => {
                 if (err) {
                     return res.status(500).json({ message: err.toString() })
-
                 } else {
                     const log = fs.readFileSync(`ofmc/user-created/EPMO.log`, {
                         encoding: 'utf8',
                     })
 
                     const parsed = parseOfmcOutput(log)
+
+                    if (!parsed.attackFound) {
+                        update(child(dbref(db),`protocols/${id}`),{
+                            isComplete: true
+                        })
+                    }
+
                     const storage = getStorage()
                     const svgRef = ref(storage, `svgs/9e161468-c6e4-42c5-b8f7-5b3614aa01f4.svg`) //change to /id
                     // Read svg files
                     fs.readFile('ofmc/user-created/9e161468-c6e4-42c5-b8f7-5b3614aa01f4.svg', (err, data) => {
                         if (err) res.status(400).json({ message: err })
-                        const uploadTask = uploadBytesResumable(svgRef, data,{contentType: 'image/svg'})
+                        const uploadTask = uploadBytesResumable(svgRef, data, { contentType: 'image/svg' })
 
                         uploadTask.on('state_changed',
                             (snapshot) => {

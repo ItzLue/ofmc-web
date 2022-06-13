@@ -38,10 +38,15 @@ export const readAllProtocols = async (): Promise<IProtocol[]> => {
 }
  */
 
-export const writeNewProtocol = (protocol: IProtocol, userId?: string) => {
+export const writeNewProtocol = async (protocol: IProtocol, userId?: string) => {
     const db = getDatabase()
     const dbRef = dbref(db)
-    get(child(dbRef, `protocols/${protocol.uid}`)).then(snapshot => {
+
+    const startingCode = protocol.isTemplate ? await get(child(dbRef, `templates/${protocol.templateId}`)).then(
+        (snapshot) => snapshot.val().startingCode
+    ) : protocol.startingCode
+
+    get(child(dbRef, `protocols/${protocol.uid}`)).then((snapshot) => {
         if (snapshot.exists()) {
             console.log('Protocol already exists')
         } else {
@@ -49,8 +54,9 @@ export const writeNewProtocol = (protocol: IProtocol, userId?: string) => {
                 name: protocol.name,
                 urlSlug: protocol.urlSlug,
                 type: protocol.type,
-                startingCode: protocol.startingCode,
-                userId: userId,
+                startingCode,
+                userId,
+                isComplete: protocol.isComplete ?? false,
             }).then(() => console.log('Protocol added'))
                 .catch((e) => console.log(e))
         }

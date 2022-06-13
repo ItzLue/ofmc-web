@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import CodeEditor from '@/components/CodeEditor'
 import TopNav from '@/components/TopNav'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Tabs from '@/components/Tabs'
 import Image from 'next/image'
@@ -13,6 +13,8 @@ import { EAPICallstate } from '@/types/api'
 import onCodeChange from '../../helpers/firebase/protocols/on-code-change'
 import ofmcSettingsState from '../../recoil/atoms/ofmcSettings'
 import { userState } from '../../recoil/atoms/users'
+import parseSvg from '@/helpers/parseSvg'
+import AttackSimplified from '@/components/AttackSimplified'
 
 // https://www.codementor.io/@johnnyb/fireedit-real-time-editor-javascript-firebase-59lnmf3c6
 const Home: NextPage = () => {
@@ -37,11 +39,12 @@ const Home: NextPage = () => {
         if (id && router.isReady) {
             setProtocolId(id)
             setCallstate(EAPICallstate.LOADING)
-            axios.get(`/api/protocols/${id}`).then((res) => {
+            const template = router.query.template as string
+            axios.get(`/api/protocols/${id}`, { params: { template: template || undefined } }).then((res) => {
                 setCode(res.data.protocol.userCode || res.data.protocol.startingCode)
             })
         }
-    }, [protocolId, router.query.id, router.isReady])
+    }, [protocolId, router.query.id, router.isReady, router.query.template])
 
     const onSubmit = () => {
         setCallstate(EAPICallstate.LOADING)
@@ -56,7 +59,7 @@ const Home: NextPage = () => {
                             ?.getIdTokenResult()
                             .then((idTokenResult) => idTokenResult.token)}`,
                     },
-                }
+                },
             )
             .then((res) => {
                 setResult(res.data)
@@ -80,24 +83,24 @@ const Home: NextPage = () => {
     }, [user])
 
     return (
-        <div className="flex flex-col gap-6 overflow-y-hidden h-screen bg-primary">
+        <div className='flex flex-col gap-6 overflow-y-hidden h-screen bg-primary'>
             <Head>
                 <title>Ofmc</title>
-                <meta name="description" content="Ofmc web interface" />
-                <link rel="icon" href="/favicon.ico" />
+                <meta name='description' content='Ofmc web interface' />
+                <link rel='icon' href='/favicon.ico' />
             </Head>
             <TopNav />
-            <div className="flex gap-6 h-full px-6">
+            <div className='flex gap-6 h-full px-6'>
                 <CodeEditor code={code} onChange={onChange} onSubmit={onSubmit} />
-                <div className="flex flex-col w-full">
+                <div className='flex flex-col w-full'>
                     <Tabs
                         tabs={[
                             {
                                 key: '1',
                                 label: 'Simplified',
                                 content: (
-                                    <div className="w-full h-screen text-white bg-vs-code">
-                                        something
+                                    <div className='w-full h-screen text-white bg-vs-code'>
+                                        <AttackSimplified result={result?.parsed}/>
                                     </div>
                                 ),
                             },
@@ -105,13 +108,13 @@ const Home: NextPage = () => {
                                 key: '2',
                                 label: 'Raw output',
                                 content: (
-                                    <div className="text-white overflow-auto h-screen bg-vs-code">
+                                    <div className='text-white overflow-auto h-screen bg-vs-code'>
                                         {result?.raw.split('\n').map((line, i) =>
                                             line ? (
-                                                <div className="pl-2" key={i}>
+                                                <div className='pl-2' key={i}>
                                                     {line}
                                                 </div>
-                                            ) : null
+                                            ) : null,
                                         )}
                                     </div>
                                 ),
@@ -120,16 +123,15 @@ const Home: NextPage = () => {
                                 key: '3',
                                 label: 'Diagram',
                                 content: (
-                                    <div className="text-white overflow-auto h-screen bg-vs-code flex items-center">
-                                        <div className="w-full h-full flex justify-center">
+                                    <div className='text-white overflow-auto h-screen bg-vs-code flex items-center'>
+                                        <div className='w-full h-full flex flex-grow align-middle justify-center'>
                                             {result?.svg && (
                                                 <Image
-                                                    className="fill-white stroke-white"
-                                                    src={`data:image/svg+xml;utf8,${result.svg}`}
-                                                    alt="Picture of the author"
-                                                    layout="fixed"
-                                                    width="900"
-                                                    height="600"
+                                                    src={`data:image/svg+xml;utf8,${parseSvg(result.svg)}`}
+                                                    alt='Picture of the author'
+                                                    layout='fixed'
+                                                    width='400'
+                                                    height='500'
                                                 />
                                             )}
                                         </div>

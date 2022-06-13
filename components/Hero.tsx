@@ -46,7 +46,7 @@ const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreated
         <div className='flex items-center gap-4 h-full w-full justify-between px-12'>
             <Infobox>
                 <div className='flex flex-col text-center'>
-                    <span>Created protocols</span>
+                    <span>Protocols created</span>
                     <span className='font-bold text-lg'>{userCreatedProtocols}</span>
                 </div>
             </Infobox>

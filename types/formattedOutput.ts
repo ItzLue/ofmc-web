@@ -14,4 +14,5 @@ export type IAttackTrace = {
     from: string;
     to: string;
     payload: string;
+    step: string;
 }

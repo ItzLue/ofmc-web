@@ -36,7 +36,6 @@ const getAllTemplates = async (req: NextApiRequest, res: NextApiResponse) => {
             for (let i in templates) {
                 result.push({ ...templates[i], uid: i })
             }
-            console.log(templates)
             return res.status(200).json({ protocols: result })
         })
     }

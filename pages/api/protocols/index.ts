@@ -37,14 +37,16 @@ pw(A,B) guessable secret between A,B`
 const handle = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const protocol: IProtocol = {
-            isComplete: false,
+            isComplete: req.body.isComplete,
             urlSlug: slugify(req.body.name),
             uid: uuidv4().toString(),
             name: req.body.name,
             type: req.body.type,
+            isTemplate: req.body.isTemplate,
+            templateId: req.body.templateId,
             startingCode: defaultStartingCode,
         }
-        writeNewProtocol(protocol, req.body.userId)
+        await writeNewProtocol(protocol, req.body.userId)
         res.status(200).json({ protocol })
     } else if (req.method === 'GET') {
         const { userId } = req.query

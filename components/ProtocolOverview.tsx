@@ -12,9 +12,9 @@ const ProtocolOverview: React.FC<IProps> = ({ protocols, templates }) => {
     const selectedTab = useRecoilValue(selectedTabState)
 
     return (
-        <div className="grid grid-cols-4 gap-8">
-            {selectedTab === 0 && <ProtocolItemList type="Classic" protocols={templates} />}
-            {selectedTab === 1 && <ProtocolItemList type="Classic" protocols={protocols} />}
+        <div className="grid grid-flow-col-dense gap-8">
+            {selectedTab === 0 && <ProtocolItemList protocols={templates} />}
+            {selectedTab === 1 && <ProtocolItemList protocols={protocols} />}
         </div>
     )
 }
