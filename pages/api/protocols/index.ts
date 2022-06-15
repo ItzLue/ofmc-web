@@ -54,13 +54,22 @@ const handle = async (req: NextApiRequest, res: NextApiResponse) => {
         const protocolsRef = ref(db, 'protocols')
         return get(protocolsRef).then((snapshot) => {
             const protocols: IProtocol[] = snapshot.val()
-            const result: IProtocol[] = []
+            const privateProtocols: IProtocol[] = []
             for (let i in protocols) {
                 if (protocols[i].userId === userId) { //TODO Quickfix to get users protocols
-                result.push({ ...protocols[i], uid: i })
+                    privateProtocols.push({ ...protocols[i], uid: i })
                 }
             }
-            return res.status(200).json({ protocols: result })
+
+            const publicProtocolsRef = ref(db, 'public')
+            return get(publicProtocolsRef).then((snapshot) => {
+                const protocols: IProtocol[] = snapshot.val()
+                const publicProtocols: IProtocol[] = []
+                for (let i in protocols) {
+                    publicProtocols.push({ ...protocols[i], uid: i })
+                }
+                return res.status(200).json({ private: privateProtocols, public: publicProtocols })
+            })
         })
     } else {
         return res.status(500).json({ message: 'Method not allowed' })

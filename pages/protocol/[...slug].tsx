@@ -5,22 +5,24 @@ import TopNav from '@/components/TopNav'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Tabs from '@/components/Tabs'
-import Image from 'next/image'
 import { useRecoilValue } from 'recoil'
 import { useRouter } from 'next/router'
 import { IFormattedOutput } from '@/types/formattedOutput'
 import { EAPICallstate } from '@/types/api'
 import onCodeChange from '../../helpers/firebase/protocols/on-code-change'
 import ofmcSettingsState from '../../recoil/atoms/ofmcSettings'
-import { userState } from '../../recoil/atoms/users'
-import parseSvg from '@/helpers/parseSvg'
 import AttackSimplified from '@/components/AttackSimplified'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/helpers/firebase/firebase'
+import CreateSvg from '@/components/CreateSvg'
+import PublishModal from '@/components/Modals/PublishModal'
+import NoUserModal from '@/components/Modals/NoUserModal'
 
 // https://www.codementor.io/@johnnyb/fireedit-real-time-editor-javascript-firebase-59lnmf3c6
 const Home: NextPage = () => {
     const [code, setCode] = useState('')
 
-    const user = useRecoilValue(userState)
+    const [user] = useAuthState(auth)
     const [result, setResult] = useState<{
         parsed: IFormattedOutput
         raw: string
@@ -29,7 +31,9 @@ const Home: NextPage = () => {
     }>()
     const [callstate, setCallstate] = useState<EAPICallstate>(EAPICallstate.READY)
     const [noUserModal, setNoUserModal] = useState(false)
+    const [protocolName, setProtocolName] = useState('')
     const [protocolId, setProtocolId] = useState('')
+    const [showPublishModal, setShowPublishModal] = useState(false)
     const ofmcSettings = useRecoilValue(ofmcSettingsState)
 
     const router = useRouter()
@@ -42,22 +46,25 @@ const Home: NextPage = () => {
             const template = router.query.template as string
             axios.get(`/api/protocols/${id}`, { params: { template: template || undefined } }).then((res) => {
                 setCode(res.data.protocol.userCode || res.data.protocol.startingCode)
+                if (template) {
+                    console.log(res.data.parsed)
+                }
+                setProtocolName(res.data.protocol.name)
             })
         }
     }, [protocolId, router.query.id, router.isReady, router.query.template])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         setCallstate(EAPICallstate.LOADING)
 
+        const token = await user?.getIdToken().then((token) => token)
         axios
             .post(
                 `/api/protocols/run/${protocolId}`,
                 { code, settings: ofmcSettings },
                 {
                     headers: {
-                        authorization: `Bearer ${user
-                            ?.getIdTokenResult()
-                            .then((idTokenResult) => idTokenResult.token)}`,
+                        authorization: `Bearer ${token}`,
                     },
                 },
             )
@@ -76,11 +83,10 @@ const Home: NextPage = () => {
         setCode(value)
     }
 
-    useEffect(() => {
-        if (!user) {
-            setNoUserModal(true)
-        }
-    }, [user])
+    const onPublishProtocol = () => {
+        axios.post(`/api/protocols/publish/${protocolId}`)
+            .then(() => setShowPublishModal(false))
+    }
 
     return (
         <div className='flex flex-col gap-6 overflow-y-hidden h-screen bg-primary'>
@@ -90,17 +96,19 @@ const Home: NextPage = () => {
                 <link rel='icon' href='/favicon.ico' />
             </Head>
             <TopNav />
-            <div className='flex gap-6 h-full px-6'>
-                <CodeEditor code={code} onChange={onChange} onSubmit={onSubmit} />
-                <div className='flex flex-col w-full'>
+            <div className='flex gap-6 flex-shrink h-full px-6'>
+                <CodeEditor protocolId={protocolId} code={code} onChange={onChange} onSubmit={onSubmit}
+                            protocolName={protocolName} showNoUserModal={() => setNoUserModal(true)} />
+                <div className='flex flex-col w-1/2 bg-vs-code overflow-ellipsis'>
                     <Tabs
+                        onPublish={user ? () => setShowPublishModal(true) : () => setNoUserModal(true)}
                         tabs={[
                             {
                                 key: '1',
                                 label: 'Simplified',
                                 content: (
-                                    <div className='w-full h-screen text-white bg-vs-code'>
-                                        <AttackSimplified result={result?.parsed}/>
+                                    <div className='w-full h-screen text-white overflow-auto'>
+                                        <AttackSimplified result={result?.parsed} />
                                     </div>
                                 ),
                             },
@@ -108,7 +116,7 @@ const Home: NextPage = () => {
                                 key: '2',
                                 label: 'Raw output',
                                 content: (
-                                    <div className='text-white overflow-auto h-screen bg-vs-code'>
+                                    <div className='text-white overflow-auto h-screen'>
                                         {result?.raw.split('\n').map((line, i) =>
                                             line ? (
                                                 <div className='pl-2' key={i}>
@@ -125,14 +133,8 @@ const Home: NextPage = () => {
                                 content: (
                                     <div className='text-white overflow-auto h-screen bg-vs-code flex items-center'>
                                         <div className='w-full h-full flex flex-grow align-middle justify-center'>
-                                            {result?.svg && (
-                                                <Image
-                                                    src={`data:image/svg+xml;utf8,${parseSvg(result.svg)}`}
-                                                    alt='Picture of the author'
-                                                    layout='fixed'
-                                                    width='400'
-                                                    height='500'
-                                                />
+                                            {result?.parsed.attackTrace && (
+                                                <CreateSvg attackTrace={result.parsed.attackTrace} />
                                             )}
                                         </div>
                                     </div>
@@ -142,9 +144,13 @@ const Home: NextPage = () => {
                     />
                 </div>
             </div>
+            <PublishModal isOpen={showPublishModal} onClose={() => setShowPublishModal(false)}
+                          onSubmit={onPublishProtocol} />
+            <NoUserModal isOpen={noUserModal} onClose={() => setNoUserModal(false)} />
         </div>
     )
 }
+
 {
     /* https://codesandbox.io/s/framer-motion-5-1-line-drawing-ph6ln?from-embed=&file=/src/App.js:895-1053  Draw svg cross */
 }

@@ -15,9 +15,9 @@ const AttackSimplified: React.FC<IProps> = ({ result }) => {
                     <span>Depth: {result.statistics?.depth}</span>
                     <span>Visisted nodes: {result.statistics?.visitedNodes}</span>
                     <span>Total steps: {[...new Set(result.attackTrace.map((a) => a.step))].length}</span>
-                    <div>
+                    <div className="flex flex-col gap-4 mb-32">
                         {result.attackTrace.map((a) => (
-                            <div className="flex gap-6">
+                            <div className="flex flex-col gap-2">
                                 <span>Step: {a.step}</span>
                                 <span>From: {a.from}</span>
                                 <span>To: {a.to}</span>

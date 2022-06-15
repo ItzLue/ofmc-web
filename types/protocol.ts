@@ -13,6 +13,7 @@ export type IProtocol = {
     userId?: string
     isTemplate?: boolean
     templateId?: string
+    isPublic?: boolean
 }
 
 export type ICreateProtocol = {

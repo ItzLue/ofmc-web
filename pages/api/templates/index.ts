@@ -2,29 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { get, getDatabase, ref } from '@firebase/database'
 import { IProtocol } from '@/types/protocol'
 
-export enum EProtocolType {
-    SYMKEYNOTTP,
-    AUTHCFF,
-    SYMKEYTPP,
-    PUBKEYNOTTP,
-    PUBKEYTPP,
-    CLASSIC,
-    USERCREATED
-}
-
-export const getProtocolName = (protocol: EProtocolType) => {
-    const map = new Map<EProtocolType, string>([
-        [EProtocolType.SYMKEYNOTTP, 'SymKeyNoTTP'],
-        [EProtocolType.AUTHCFF, 'AuthCFF'],
-        [EProtocolType.SYMKEYTPP, 'SymKeyTTP'],
-        [EProtocolType.PUBKEYNOTTP, 'PubKeyNoTTP'],
-        [EProtocolType.PUBKEYTPP, 'PubKeyTTP'],
-        [EProtocolType.CLASSIC, 'Classic'],
-        [EProtocolType.USERCREATED, 'UserCreated'],
-    ])
-    return map.get(protocol)
-}
-
 
 const getAllTemplates = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {

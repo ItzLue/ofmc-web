@@ -4,7 +4,6 @@ import { child, get, getDatabase, ref as dbref, update } from '@firebase/databas
 import parseOfmcOutput from '../../../../helpers/server/parseOfmcOutput'
 import { getDownloadURL, getStorage, ref } from '@firebase/storage'
 import { uploadBytesResumable } from '@firebase/storage'
-import parseSvg from '@/helpers/parseSvg'
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {

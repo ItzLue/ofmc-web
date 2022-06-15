@@ -4,42 +4,28 @@ import {
     browserSessionPersistence,
     GithubAuthProvider,
     setPersistence,
-    signInWithPopup,
+    signInWithPopup, signOut,
 } from '@firebase/auth'
-import { useRecoilState } from 'recoil'
-import { auth, provider } from '@/helpers/firebase/firebase'
-import { userState } from '../recoil/atoms/users'
-import writeNewUser from '../helpers/firebase/create-new-user'
+import { auth } from '@/helpers/firebase/firebase'
 import Image from 'next/image'
 import Infobox from '@/components/Infobox'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 
 type IProps = {
     totalCompleted: number
     userCreatedProtocols: number
     mostCompletedType: string
+    onOpenLoginModal: () => void
+    onOpenSignUpModal: () => void
 }
 
-const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreatedProtocols }) => {
-    const [user, setUser] = useRecoilState(userState)
+const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreatedProtocols, onOpenLoginModal, onOpenSignUpModal }) => {
+    const [user, loading, error] = useAuthState(auth)
 
-    const onSignIn = async () => {
-        await setPersistence(auth, browserSessionPersistence)
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const user = result.user
-                writeNewUser(user)
-                setUser(user)
-            })
-            .catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code
-                const errorMessage = error.message
-                // The email of the user's account used.
-                const email = error.customData.email
-                // The AuthCredential type that was used.
-                const credential = GithubAuthProvider.credentialFromError(error)
-            })
+
+    const logout = () => {
+        signOut(auth)
     }
 
     const userStats = (
@@ -53,14 +39,14 @@ const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreated
 
             <Infobox>
                 <div className='flex flex-col text-center'>
-                    <span>Total completed</span>
+                    <span>Total attacks prevented</span>
                     <span className='font-bold text-lg'>{totalCompleted}</span>
                 </div>
             </Infobox>
 
             <Infobox>
                 <div className='flex flex-col text-center'>
-                    <span>Most completed type</span>
+                    <span>Most solved type</span>
                     <span className='font-bold text-lg'>{mostCompletedType}</span>
                 </div>
             </Infobox>
@@ -82,14 +68,18 @@ const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreated
                                 width={24}
                             />
                         )}
+                        <button onClick={logout}>Log out</button>
                     </div>
                 )}
             </div>
             {user ? (
                 userStats
             ) : (
-                <div className='text-center h-full w-full'>
-                    <button onClick={onSignIn}>Please login to see stats</button>
+                <div className='flex justify-end mt-2 mr-2'>
+                    <div className="flex gap-4">
+                        <button onClick={onOpenLoginModal}>Login</button>
+                        <button className='px-4 border border-transparent bg-blue-500 rounded-full py-2 text-white' onClick={onOpenSignUpModal}>Sign up</button>
+                    </div>
                 </div>
             )}
         </div>

@@ -5,16 +5,19 @@ import { useRecoilValue } from 'recoil'
 import selectedTabState from '../recoil/atoms/tabs'
 
 type IProps = {
-    protocols: IProtocol[]
+    privateProtocols: IProtocol[]
     templates: IProtocol[]
+    publicProtocols: IProtocol[]
+    onRefresh: () => void
 }
-const ProtocolOverview: React.FC<IProps> = ({ protocols, templates }) => {
+const ProtocolOverview: React.FC<IProps> = ({ privateProtocols, templates, onRefresh,publicProtocols }) => {
     const selectedTab = useRecoilValue(selectedTabState)
 
     return (
         <div className="grid grid-flow-col-dense gap-8">
-            {selectedTab === 0 && <ProtocolItemList protocols={templates} />}
-            {selectedTab === 1 && <ProtocolItemList protocols={protocols} />}
+            {selectedTab === 0 && <ProtocolItemList onRefresh={onRefresh} protocols={templates} />}
+            {selectedTab === 1 &&<ProtocolItemList onRefresh={onRefresh} protocols={privateProtocols} />}
+            {selectedTab === 2 && <ProtocolItemList onRefresh={onRefresh} protocols={publicProtocols} />}
         </div>
     )
 }

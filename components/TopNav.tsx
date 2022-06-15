@@ -1,14 +1,14 @@
 import { NextPage } from 'next'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { useRouter } from 'next/router'
-import { useRecoilValue } from 'recoil'
-import { userState } from '../recoil/atoms/users'
 import Image from 'next/image'
 import React from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/helpers/firebase/firebase'
 
 const TopNav: NextPage = () => {
     const router = useRouter()
-    const user = useRecoilValue(userState)
+    const [user] = useAuthState(auth)
     return (
         <nav className="flex items-center justify-between w-full h-fit px-6 text-white">
             <button
