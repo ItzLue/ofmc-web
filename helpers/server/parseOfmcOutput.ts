@@ -1,29 +1,35 @@
 import { IFormattedOutput } from '@/types/formattedOutput'
 
-
 const parseOfmcOutput = (output: string): IFormattedOutput => {
-
     const lines = output.split('\n')
-    const inputFile = lines[2].substring(3)
-    const attackFound = lines[4].toLowerCase().includes('attack_found')
-    const goal = lines[6].substring(2)
-    const visitedNodesLine = lines.find(line => line.includes('visitedNodes'))
-    const depthLine = lines.find(line => line.includes('depth'))
+    const inputFile = lines[1].split('/')[2]
+    const attackFound = !output.includes('NO_ATTACK_FOUND')
+    const goal = lines[5]
+    const visitedNodesLine = lines.find((line) => line.includes('visitedNodes'))
+    const depthLine = lines.find((line) => line.includes('depth'))
+    const timeLine = lines.find((line) => line.includes('TIME'))
+    const parseTimeLine = lines.find((line) => line.includes('parseTime'))
 
-    const visitedNodes = visitedNodesLine ? parseInt(visitedNodesLine.substring(16).split(' ')[0]) : undefined
+    const visitedNodes = visitedNodesLine
+        ? parseInt(visitedNodesLine.substring(16).split(' ')[0])
+        : undefined
+    const time = timeLine ? parseInt(timeLine.substring(4).split(' ')[0]) : undefined
+    const parseTime = parseTimeLine ? parseInt(parseTimeLine.substring(9).split(' ')[0]) : undefined
     const depth = depthLine ? parseInt(depthLine.substring(9).split(' ')[0]) : undefined
     let statistics = undefined
-    if (visitedNodes && depth) {
+    if ((visitedNodes && depth) || time || parseTime) {
         statistics = {
             visitedNodes,
             depth,
+            time,
+            parseTime,
         }
     }
 
     if (attackFound) {
         const attackTrace = []
-        const attackTraceLineIndex = lines.findIndex(line => line.includes('ATTACK TRACE'))
-        const reachedStateLineIndex = lines.findIndex(line => line.includes('Reached State'))
+        const attackTraceLineIndex = lines.findIndex((line) => line.includes('ATTACK TRACE'))
+        const reachedStateLineIndex = lines.findIndex((line) => line.includes('Reached State'))
 
         let step = 1
         for (let i = attackTraceLineIndex + 1; i < reachedStateLineIndex - 2; i++) {
@@ -40,7 +46,7 @@ const parseOfmcOutput = (output: string): IFormattedOutput => {
         }
         return {
             inputFile,
-            attackFound,
+            attackFound: attackFound,
             goal,
             attackTrace,
             statistics,
@@ -49,7 +55,7 @@ const parseOfmcOutput = (output: string): IFormattedOutput => {
 
     return {
         inputFile,
-        attackFound,
+        attackFound: attackFound,
         goal,
         statistics,
     }

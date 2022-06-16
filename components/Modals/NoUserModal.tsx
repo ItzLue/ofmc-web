@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from 'react'
-import { EAPICallstate } from '@/types/api'
+import { EAPICallState } from '@/types/api'
 import {
     useCreateUserWithEmailAndPassword,
-    useSendEmailVerification, useSignInWithGithub,
+    useSendEmailVerification,
+    useSignInWithGithub,
     useUpdateProfile,
 } from 'react-firebase-hooks/auth'
 import { auth } from '@/helpers/firebase/firebase'
@@ -19,43 +20,35 @@ type IProps = {
     onClose: () => void
 }
 
-const LoginModal: NextPage<IProps> = ({ isOpen, onClose }) => {
-    const [APIcallState, setAPICallState] = useState<EAPICallstate>(EAPICallstate.READY)
-
+const NoUserModal: NextPage<IProps> = ({ isOpen, onClose }) => {
     const router = useRouter()
 
-    const [
-        createUserWithEmailAndPassword,
-        user,
-        loading,
-        error,
-    ] = useCreateUserWithEmailAndPassword(auth)
-
+    const [createUserWithEmailAndPassword, user, loading, error] =
+        useCreateUserWithEmailAndPassword(auth)
 
     const [updateProfile, updating, updateError] = useUpdateProfile(auth)
 
-    const [sendEmailVerification, sending, EmailVerificationError] = useSendEmailVerification(
-        auth,
-    )
+    const [sendEmailVerification, sending, EmailVerificationError] = useSendEmailVerification(auth)
 
-    const { register, handleSubmit } = useForm<{ username: string, email: string, password: string }>()
+    const { register, handleSubmit } = useForm<{
+        username: string
+        email: string
+        password: string
+    }>()
 
-    const onSignUp = async (data: { username: string, email: string, password: string }) => {
+    const onSignUp = async (data: { username: string; email: string; password: string }) => {
         await setPersistence(auth, browserSessionPersistence)
 
-        setAPICallState(EAPICallstate.LOADING)
         createUserWithEmailAndPassword(data.email, data.password).then(async () => {
             await updateProfile({
                 displayName: data.username,
             })
             await sendEmailVerification()
-            setAPICallState(EAPICallstate.SUCCESS)
             router.push('/')
         })
     }
 
     const [signInWithGitHub, userGithub, loadingGithub, errorGithub] = useSignInWithGithub(auth)
-
 
     const onSignInGithub = () => {
         signInWithGitHub().then(() => {
@@ -63,58 +56,50 @@ const LoginModal: NextPage<IProps> = ({ isOpen, onClose }) => {
         })
     }
 
-
     return (
-        <Modal title='Login' isOpen={isOpen} onClose={onClose}>
-            <div className='fixed inset-0 overflow-y-auto'>
-                <div className='flex min-h-full items-center justify-center p-4 text-center'>
+        <Modal title="Login" isOpen={isOpen} onClose={onClose}>
+            <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4 text-center">
                     <Transition.Child
                         as={Fragment}
-                        enter='ease-out duration-300'
-                        enterFrom='opacity-0 scale-95'
-                        enterTo='opacity-100 scale-100'
-                        leave='ease-in duration-200'
-                        leaveFrom='opacity-100 scale-100'
-                        leaveTo='opacity-0 scale-95'
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0 scale-95"
+                        enterTo="opacity-100 scale-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100 scale-100"
+                        leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel
-                            className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                        <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                             <Dialog.Title
-                                as='h3'
-                                className='text-lg font-medium leading-6 text-gray-900 mb-2'
+                                as="h3"
+                                className="text-lg font-medium leading-6 text-gray-900 mb-2"
                             >
                                 Please sign up, to use this feature
                             </Dialog.Title>
 
-                            <form onSubmit={handleSubmit(onSignUp)} className='flex flex-col gap-4'>
-                                <label htmlFor='Username'>Username</label>
-                                <input
-                                    type='text'
-                                    {...register('username')}
-                                />
+                            <form onSubmit={handleSubmit(onSignUp)} className="flex flex-col gap-4">
+                                <label htmlFor="Username">Username</label>
+                                <input type="text" {...register('username')} />
 
-                                <label htmlFor='email'>Email</label>
-                                <input
-                                    type='email'
-                                    {...register('email')}
-                                />
-                                <label htmlFor='depth'>Password</label>
-                                <input
-                                    type='password'
-                                    {...register('password')}
-                                />
+                                <label htmlFor="email">Email</label>
+                                <input type="email" {...register('email')} />
+                                <label htmlFor="depth">Password</label>
+                                <input type="password" {...register('password')} />
                                 <button
-                                    type='submit'
-                                    className='inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                                    type="submit"
+                                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                 >
                                     Sign up
                                 </button>
                                 {error && <p>{error.message}</p>}
                             </form>
 
-                            <div className='mt-4 flex justify-center'>
-                                <div className="w-full inline-flex gap-2 justify-center border border rounded-md border-black py-2 cursor-pointer hover:bg-gray-200" onClick={onSignInGithub}>
-                                    <AiFillGithub className="h-6 w-6"/>
+                            <div className="mt-4 flex justify-center">
+                                <div
+                                    className="w-full inline-flex gap-2 justify-center border border rounded-md border-black py-2 cursor-pointer hover:bg-gray-200"
+                                    onClick={onSignInGithub}
+                                >
+                                    <AiFillGithub className="h-6 w-6" />
                                     <span>Sign in with Github</span>
                                 </div>
                             </div>
@@ -126,4 +111,4 @@ const LoginModal: NextPage<IProps> = ({ isOpen, onClose }) => {
     )
 }
 
-export default LoginModal
+export default NoUserModal

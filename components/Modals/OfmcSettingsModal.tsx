@@ -25,45 +25,44 @@ const OfmcSettingsModal: React.FC<IProps> = ({ isOpen, onClose }) => {
         onClose()
     }
     return (
-        <Modal title='Ofmc settings' isOpen={isOpen} onClose={onClose}>
-            <div className='fixed inset-0 overflow-y-auto'>
-                <div className='flex min-h-full items-center justify-center p-4 text-center'>
+        <Modal title="Ofmc settings" isOpen={isOpen} onClose={onClose}>
+            <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4 text-center">
                     <Transition.Child
                         as={Fragment}
-                        enter='ease-out duration-300'
-                        enterFrom='opacity-0 scale-95'
-                        enterTo='opacity-100 scale-100'
-                        leave='ease-in duration-200'
-                        leaveFrom='opacity-100 scale-100'
-                        leaveTo='opacity-0 scale-95'
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0 scale-95"
+                        enterTo="opacity-100 scale-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100 scale-100"
+                        leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel
-                            className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                        <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                             <Dialog.Title
-                                as='h3'
-                                className='text-lg font-medium leading-6 text-gray-900 mb-2'
+                                as="h3"
+                                className="text-lg font-medium leading-6 text-gray-900 mb-2"
                             >
                                 Ofmc settings
                             </Dialog.Title>
-                            <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
-                                <label htmlFor='numSess'>Number of sessions</label>
+                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+                                <label htmlFor="numSess">Number of sessions</label>
                                 <input
                                     defaultValue={2}
-                                    type='number'
+                                    type="number"
                                     min={1}
                                     {...register('numSess')}
                                 />
 
-                                <label htmlFor='depth'>Depth (0 for infinite)</label>
+                                <label htmlFor="depth">Depth (0 for infinite)</label>
                                 <input
                                     defaultValue={0}
-                                    type='number'
-                                    min={1}
+                                    type="number"
+                                    min={0}
                                     {...register('depth')}
                                 />
                                 <button
-                                    type='submit'
-                                    className='inline-flex justify-center rounded-md border border-transparent bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
+                                    type="submit"
+                                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                 >
                                     Update
                                 </button>

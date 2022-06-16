@@ -8,7 +8,6 @@ import Tabs from '@/components/Tabs'
 import { useRecoilValue } from 'recoil'
 import { useRouter } from 'next/router'
 import { IFormattedOutput } from '@/types/formattedOutput'
-import { EAPICallstate } from '@/types/api'
 import onCodeChange from '../../helpers/firebase/protocols/on-code-change'
 import ofmcSettingsState from '../../recoil/atoms/ofmcSettings'
 import AttackSimplified from '@/components/AttackSimplified'
@@ -17,11 +16,12 @@ import { auth } from '@/helpers/firebase/firebase'
 import CreateSvg from '@/components/CreateSvg'
 import PublishModal from '@/components/Modals/PublishModal'
 import NoUserModal from '@/components/Modals/NoUserModal'
+import EAPICallState from '@/types/api'
 
 // https://www.codementor.io/@johnnyb/fireedit-real-time-editor-javascript-firebase-59lnmf3c6
 const Home: NextPage = () => {
     const [code, setCode] = useState('')
-
+    const [callState, setCallState] = useState<EAPICallState>(EAPICallState.READY)
     const [user] = useAuthState(auth)
     const [result, setResult] = useState<{
         parsed: IFormattedOutput
@@ -29,7 +29,6 @@ const Home: NextPage = () => {
         attackTraceUrl: string
         svg: string
     }>()
-    const [callstate, setCallstate] = useState<EAPICallstate>(EAPICallstate.READY)
     const [noUserModal, setNoUserModal] = useState(false)
     const [protocolName, setProtocolName] = useState('')
     const [protocolId, setProtocolId] = useState('')
@@ -42,40 +41,32 @@ const Home: NextPage = () => {
         const id = router.query.id as string
         if (id && router.isReady) {
             setProtocolId(id)
-            setCallstate(EAPICallstate.LOADING)
             const template = router.query.template as string
-            axios.get(`/api/protocols/${id}`, { params: { template: template || undefined } }).then((res) => {
-                setCode(res.data.protocol.userCode || res.data.protocol.startingCode)
-                if (template) {
-                    console.log(res.data.parsed)
-                }
-                setProtocolName(res.data.protocol.name)
-            })
+            setCallState(EAPICallState.LOADING)
+            axios
+                .get(`/api/protocols/${id}`, { params: { template: template || undefined } })
+                .then((res) => {
+                    setCode(res.data.protocol.userCode || res.data.protocol.startingCode)
+                    if (template) {
+                        setResult(res.data.attack)
+                    }
+                    setProtocolName(res.data.protocol.name)
+                    setCallState(EAPICallState.SUCCESS)
+                })
+                .catch(() => setCallState(EAPICallState.ERROR))
         }
-    }, [protocolId, router.query.id, router.isReady, router.query.template])
+        if (!id && router.isReady) router.push('/')
+    }, [protocolId, router.query.id, router.isReady, router.query.template, router])
 
     const onSubmit = async () => {
-        setCallstate(EAPICallstate.LOADING)
-
-        const token = await user?.getIdToken().then((token) => token)
+        setCallState(EAPICallState.LOADING)
         axios
-            .post(
-                `/api/protocols/run/${protocolId}`,
-                { code, settings: ofmcSettings },
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                },
-            )
+            .post(`/api/protocols/run/${protocolId}`, { code, settings: ofmcSettings })
             .then((res) => {
                 setResult(res.data)
-                setCallstate(EAPICallstate.SUCCESS)
+                setCallState(EAPICallState.SUCCESS)
             })
-            .catch((err) => {
-                console.error(err)
-                setCallstate(EAPICallstate.ERROR)
-            })
+            .catch(() => setCallState(EAPICallState.ERROR))
     }
 
     const onChange = (value: string) => {
@@ -84,30 +75,46 @@ const Home: NextPage = () => {
     }
 
     const onPublishProtocol = () => {
-        axios.post(`/api/protocols/publish/${protocolId}`)
-            .then(() => setShowPublishModal(false))
+        setCallState(EAPICallState.LOADING)
+        axios
+            .post(`/api/protocols/publish/${protocolId}`)
+            .then(() => {
+                setShowPublishModal(false)
+                setCallState(EAPICallState.SUCCESS)
+            })
+            .catch(() => setCallState(EAPICallState.ERROR))
     }
 
     return (
-        <div className='flex flex-col gap-6 overflow-y-hidden h-screen bg-primary'>
+        <div className="flex flex-col gap-6 overflow-y-hidden h-screen bg-primary">
             <Head>
                 <title>Ofmc</title>
-                <meta name='description' content='Ofmc web interface' />
-                <link rel='icon' href='/favicon.ico' />
+                <meta name="description" content="Ofmc web interface" />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             <TopNav />
-            <div className='flex gap-6 flex-shrink h-full px-6'>
-                <CodeEditor protocolId={protocolId} code={code} onChange={onChange} onSubmit={onSubmit}
-                            protocolName={protocolName} showNoUserModal={() => setNoUserModal(true)} />
-                <div className='flex flex-col w-1/2 bg-vs-code overflow-ellipsis'>
+            <div className="flex gap-6 flex-shrink h-full px-6">
+                <CodeEditor
+                    protocolId={protocolId}
+                    code={code}
+                    onChange={onChange}
+                    onSubmit={onSubmit}
+                    protocolName={protocolName}
+                    showNoUserModal={() => setNoUserModal(true)}
+                    isLoading={callState === EAPICallState.LOADING}
+                />
+                <div className="flex flex-col w-1/2 bg-vs-code overflow-ellipsis">
                     <Tabs
-                        onPublish={user ? () => setShowPublishModal(true) : () => setNoUserModal(true)}
+                        isLoading={callState === EAPICallState.LOADING}
+                        onPublish={
+                            user ? () => setShowPublishModal(true) : () => setNoUserModal(true)
+                        }
                         tabs={[
                             {
                                 key: '1',
                                 label: 'Simplified',
                                 content: (
-                                    <div className='w-full h-screen text-white overflow-auto'>
+                                    <div className="w-full h-screen text-white overflow-auto">
                                         <AttackSimplified result={result?.parsed} />
                                     </div>
                                 ),
@@ -116,13 +123,13 @@ const Home: NextPage = () => {
                                 key: '2',
                                 label: 'Raw output',
                                 content: (
-                                    <div className='text-white overflow-auto h-screen'>
+                                    <div className="text-white overflow-auto h-screen">
                                         {result?.raw.split('\n').map((line, i) =>
                                             line ? (
-                                                <div className='pl-2' key={i}>
+                                                <div className="pl-2" key={i}>
                                                     {line}
                                                 </div>
-                                            ) : null,
+                                            ) : null
                                         )}
                                     </div>
                                 ),
@@ -131,10 +138,12 @@ const Home: NextPage = () => {
                                 key: '3',
                                 label: 'Diagram',
                                 content: (
-                                    <div className='text-white overflow-auto h-screen bg-vs-code flex items-center'>
-                                        <div className='w-full h-full flex flex-grow align-middle justify-center'>
+                                    <div className="text-white overflow-auto h-screen bg-vs-code flex items-center">
+                                        <div className="w-full h-full flex flex-grow align-middle justify-center">
                                             {result?.parsed.attackTrace && (
-                                                <CreateSvg attackTrace={result.parsed.attackTrace} />
+                                                <CreateSvg
+                                                    attackTrace={result.parsed.attackTrace}
+                                                />
                                             )}
                                         </div>
                                     </div>
@@ -144,8 +153,12 @@ const Home: NextPage = () => {
                     />
                 </div>
             </div>
-            <PublishModal isOpen={showPublishModal} onClose={() => setShowPublishModal(false)}
-                          onSubmit={onPublishProtocol} />
+            <PublishModal
+                isOpen={showPublishModal}
+                onClose={() => setShowPublishModal(false)}
+                onSubmit={onPublishProtocol}
+                isLoading={callState === EAPICallState.LOADING}
+            />
             <NoUserModal isOpen={noUserModal} onClose={() => setNoUserModal(false)} />
         </div>
     )

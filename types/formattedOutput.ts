@@ -1,18 +1,20 @@
 export type IFormattedOutput = {
-    inputFile: string;
-    attackFound: boolean;
-    goal: string;
+    inputFile: string
+    attackFound: boolean
+    goal: string
     statistics?: {
-        visitedNodes: number;
-        depth: number;
+        visitedNodes: number
+        depth: number
+        time: number
+        parseTime: number
     }
-    attackTrace?: IAttackTrace[];
-    reachedState?: string;
+    attackTrace?: IAttackTrace[]
+    reachedState?: string
 }
 
 export type IAttackTrace = {
-    from: string;
-    to: string;
-    payload: string;
-    step: string;
+    from: string
+    to: string
+    payload: string
+    step: string
 }

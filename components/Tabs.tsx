@@ -1,15 +1,18 @@
 import { NextPage } from 'next'
 import { useState } from 'react'
 import { ITab } from '@/types/tabs'
+import Button from '@/components/Button'
+import Loader from '@/components/Loader'
 
 type IProps = {
     className?: string
     tabs: ITab[]
     defaultTab?: string
     onPublish?: () => void
+    isLoading: boolean
 }
 
-const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab, onPublish }) => {
+const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab, onPublish, isLoading }) => {
     const [activeTab, setActiveTab] = useState(defaultTab ?? '1')
 
     return (
@@ -17,10 +20,10 @@ const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab, onPublish })
             <nav
                 className={`${className} bg-gray-800 text-white flex gap-6 w-full h-8 rounded-tl-lg rounded-tr-lg overflow-y-hidden overflow-x-hidden items-center`}
             >
-                <div className='flex w-full justify-between'>
+                <div className="flex w-full justify-between">
                     <div>
                         {tabs.map((tab) => (
-                            <button
+                            <Button
                                 className={`flex-shrink-0 bg-transparent m-0 p-3 border-0 ${
                                     activeTab === tab.key ? 'font-medium bg-[#1e1e1e]' : ''
                                 } ${
@@ -28,21 +31,30 @@ const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab, onPublish })
                                         ? 'text-gray-200 font-normal cursor-default'
                                         : 'cursor-pointer hover:text-amber-600'
                                 }`}
-                                type='button'
+                                type="button"
                                 onClick={() => setActiveTab(tab.key)}
                                 key={tab.key}
                                 disabled={tab.disabled}
                             >
                                 {tab.label}
-                            </button>
+                            </Button>
                         ))}
                     </div>
                     {onPublish && (
-                        <button type="button" onClick={onPublish} className='p-2 bg-green-700 rounded-tr-lg hover:bg-green-900'>Publish</button>)}
+                        <Button
+                            loading={isLoading}
+                            type="button"
+                            onClick={onPublish}
+                            className="p-2 bg-green-700 rounded-tr-lg hover:bg-green-900"
+                        >
+                            Publish
+                        </Button>
+                    )}
                 </div>
-
             </nav>
-            {tabs.find((tab) => tab.key === activeTab)?.content}
+            <Loader iconClass="text-4xl mt-32" loading={isLoading}>
+                {tabs.find((tab) => tab.key === activeTab)?.content}
+            </Loader>
         </div>
     )
 }

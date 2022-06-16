@@ -3,7 +3,7 @@ import { IOFMCSettings } from '@/components/Modals/OfmcSettingsModal'
 
 const ofmcSettingsState = atom<IOFMCSettings | undefined>({
     key: 'ofmcSettings',
-    default: undefined,
+    default: { numSess: 2, depth: 0 },
 })
 
 export default ofmcSettingsState

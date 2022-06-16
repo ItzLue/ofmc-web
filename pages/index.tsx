@@ -53,18 +53,20 @@ const Home: NextPage<IProps> = ({ templates }) => {
 
     const getMostCompletedType = (arr: IProtocol[]): string => {
         const newArray = [...arr]
-        return newArray
-            .filter((protocol) => protocol.isComplete)
-            .sort(
-                (a, b) =>
-                    newArray.filter((p) => p === a).length -
-                    newArray.filter((p) => p === b).length,
-            )
-            .pop()?.type || 'none'
+        return (
+            newArray
+                .filter((protocol) => protocol.isComplete)
+                .sort(
+                    (a, b) =>
+                        newArray.filter((p) => p === a).length -
+                        newArray.filter((p) => p === b).length
+                )
+                .pop()?.type || 'none'
+        )
     }
 
     return (
-        <div className='h-screen w-screen'>
+        <div className="h-screen w-screen">
             <Hero
                 mostCompletedType={getMostCompletedType(privateProtocols)}
                 totalCompleted={privateProtocols.filter((p) => p.isComplete).length}
@@ -72,16 +74,29 @@ const Home: NextPage<IProps> = ({ templates }) => {
                 onOpenLoginModal={() => setShowLoginModal(true)}
                 onOpenSignUpModal={() => setShowSignUpModal(true)}
             />
-            <main className='px-12'>
+            <main className="px-12">
                 <div className="flex mt-6 justify-center items-center">
-                    {user && <AiFillPlusCircle className="text-3xl cursor-pointer h-8 w-8 text-blue-500 hover:text-blue-700" onClick={() => setShowCreateProtocolModal(true)} />}
+                    {user && (
+                        <AiFillPlusCircle
+                            className="text-3xl cursor-pointer h-8 w-8 text-blue-500 hover:text-blue-700"
+                            onClick={() => setShowCreateProtocolModal(true)}
+                        />
+                    )}
                     <ProtocolTabs />
                 </div>
-                <ProtocolOverview onRefresh={() => fetchProtocols()} privateProtocols={privateProtocols}
-                                  templates={templates} publicProtocols={publicProtocols} />
+                <ProtocolOverview
+                    onRefresh={() => fetchProtocols()}
+                    privateProtocols={privateProtocols}
+                    templates={templates}
+                    publicProtocols={publicProtocols}
+                />
                 {user && (
-                    <NewProtocolModal isOpen={showCreateProtocolModal} onClose={() => setShowCreateProtocolModal(false)}
-                                      onSubmit={onSubmit} />)}
+                    <NewProtocolModal
+                        isOpen={showCreateProtocolModal}
+                        onClose={() => setShowCreateProtocolModal(false)}
+                        onSubmit={onSubmit}
+                    />
+                )}
                 <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
                 <SignupModal isOpen={showSignUpModal} onClose={() => setShowSignUpModal(false)} />
             </main>

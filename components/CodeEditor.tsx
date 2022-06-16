@@ -10,6 +10,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '@/helpers/firebase/firebase'
 import { ImCheckmark, ImCross } from 'react-icons/im'
 import axios from 'axios'
+import Button from '@/components/Button'
 
 type IProps = {
     code: string
@@ -18,9 +19,18 @@ type IProps = {
     protocolName: string
     protocolId: string
     showNoUserModal: () => void
+    isLoading: boolean
 }
 
-const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit, protocolName, protocolId, showNoUserModal }) => {
+const CodeEditor: NextPage<IProps> = ({
+    code,
+    onChange,
+    onSubmit,
+    protocolName,
+    protocolId,
+    showNoUserModal,
+    isLoading,
+}) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
     const [user] = useAuthState(auth)
     const uploadRef = useRef(null)
@@ -32,14 +42,14 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit, protocolName, 
     }, [protocolName])
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (!e.target.files?.[0]) return
-            const file = e.target.files[0]
-            if (!file.name.includes('.AnB')) return
-            const reader = new FileReader()
-            reader.onload = async (e: any) => {
-                onChange(e.target.result)
-            }
-            reader.readAsText(file)
+        if (!e.target.files?.[0]) return
+        const file = e.target.files[0]
+        if (!file.name.includes('.AnB')) return
+        const reader = new FileReader()
+        reader.onload = async (e: any) => {
+            onChange(e.target.result)
+        }
+        reader.readAsText(file)
     }
 
     const handleFileDownload = () => {
@@ -57,7 +67,10 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit, protocolName, 
         monaco.languages.setMonarchTokensProvider('AnB', {
             tokenizer: {
                 root: [
-                    [/\b(Protocol|Types|Agent|Number|Function|Symmetric_key|PublicKey|Knowledge|where|Actions|Goals|authenticates|on|secrecy|of|secret|between)\b(:?)/g, 'keywords'],
+                    [
+                        /\b(Protocol|Types|Agent|Number|Function|Symmetric_key|PublicKey|Knowledge|where|Actions|Goals|authenticates|on|secrecy|of|secret|between)\b(:?)/g,
+                        'keywords',
+                    ],
                     //[/[a-zA-Z]\w*|\d/, 'constants'],
                     [/(exp|inv|hash)/g, 'builtinfunctions'],
                     [/\\b[A-Z_][a-zA-Z0-9_]*/g, 'constantsNumerics'],
@@ -66,7 +79,6 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit, protocolName, 
                 ],
             },
         })
-
 
         // Define a new theme that contains only rules that match this language
         monaco.editor.defineTheme('AnBTheme', {
@@ -93,46 +105,65 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit, protocolName, 
     }
 
     return (
-        <div className='w-1/2 h-full'>
-            <div
-                className='flex justify-between bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white'>
-                <div className='inline-flex gap-2 ml-4 items-center'>
-                    {(user && changeName) ?
-                        <input type='text' value={name} onChange={(e) => setName(e.target.value)}
-                               className='bg-vs-code text-white' /> :
-                        <span>{name}</span>}
-                    {(user && !changeName) ? <BiEdit className='text-white h-4 w-4 cursor-pointer'
-                                                     onClick={() => setChangeName(!changeName)} /> :
-                        <ImCross className={`text-red-700 h-4 w-4 cursor-pointer ${!user && 'hidden'}`}
-                                 onClick={() => setChangeName(!changeName)} />}
-                    {(user && changeName) &&
-                        <ImCheckmark className='text-green-500 h-4 w-4 cursor-pointer' onClick={onChangeName} />}
+        <div className="w-1/2 h-full">
+            <div className="flex justify-between bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white">
+                <div className="inline-flex gap-2 ml-4 items-center">
+                    {user && changeName ? (
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="bg-vs-code text-white"
+                        />
+                    ) : (
+                        <span>{name}</span>
+                    )}
+                    {user && !changeName ? (
+                        <BiEdit
+                            className="text-white h-4 w-4 cursor-pointer"
+                            onClick={() => setChangeName(!changeName)}
+                        />
+                    ) : (
+                        <ImCross
+                            className={`text-red-700 h-4 w-4 cursor-pointer ${!user && 'hidden'}`}
+                            onClick={() => setChangeName(!changeName)}
+                        />
+                    )}
+                    {user && changeName && (
+                        <ImCheckmark
+                            className="text-green-500 h-4 w-4 cursor-pointer"
+                            onClick={onChangeName}
+                        />
+                    )}
                 </div>
-                <div className='flex flex-row-reverse items-center gap-4'>
-                    <button
-                        className='p-2 bg-blue-700 rounded-tr-lg hover:bg-blue-900'
-                        type='button'
+                <div className="flex flex-row-reverse items-center gap-4">
+                    <Button
+                        className="p-2 bg-blue-700 rounded-tr-lg hover:bg-blue-900"
+                        type="button"
                         onClick={user ? onSubmit : showNoUserModal}
+                        loading={isLoading}
                     >
                         Run code
-                    </button>
+                    </Button>
                     <div>
-                        <VisuallyHidden
-                            className='relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content'>
+                        <VisuallyHidden className="relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content">
                             <input
                                 disabled={!user}
-                                type='file'
-                                id='file'
-                                accept='.AnB'
+                                type="file"
+                                id="file"
+                                accept=".AnB"
                                 onChange={handleFileUpload}
                                 ref={uploadRef}
                             />
                         </VisuallyHidden>
-                        <label htmlFor='file' className='cursor-pointer'>
-                            <FiUpload className='h-4 w-4'  onClick={() => !user && showNoUserModal()}/>
+                        <label htmlFor="file" className="cursor-pointer">
+                            <FiUpload
+                                className="h-4 w-4"
+                                onClick={() => !user && showNoUserModal()}
+                            />
                         </label>
                     </div>
-                    <FiDownload className='h-4 w-4 cursor-pointer' onClick={handleFileDownload} />
+                    <FiDownload className="h-4 w-4 cursor-pointer" onClick={handleFileDownload} />
                     <FiSettings
                         onClick={() => {
                             if (!user) {
@@ -141,15 +172,15 @@ const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit, protocolName, 
                                 setIsSettingsOpen(true)
                             }
                         }}
-                        className='w-4 h-4 cursor-pointer'
+                        className="w-4 h-4 cursor-pointer"
                     />
                 </div>
             </div>
             <Editor
-                theme='AnBTheme'
+                theme="AnBTheme"
                 value={code}
-                height='100%'
-                language='AnB'
+                height="100%"
+                language="AnB"
                 onChange={(value) => onChange(value || '')}
                 options={{
                     minimap: {

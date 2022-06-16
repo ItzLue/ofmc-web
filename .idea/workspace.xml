@@ -2,17 +2,68 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="154498ed-4852-405b-aa13-8c547169b2b8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/components/ProtocolOverview.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ofmc/user-created/bb749819-6953-4081-a749-4be804590c6d.AnB" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recoil/atoms/tabs.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/a.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/attacktrace.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/Button.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/Loader.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/051c7094-6a33-4dcb-b9bf-e250afde356a.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/169890bf-6b7a-4512-af50-0b6537126e81.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/3124b674-4873-44a8-b517-ee1d3c18fa9b.AnB" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/3d90e431-f1e7-4b12-b73d-11ea25db25cf.AnB" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/3d90e431-f1e7-4b12-b73d-11ea25db25cf.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/99d6d3f6-046b-4d0d-bbd7-f10f45163699.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/9d0601fb-d061-46d7-892f-a7ddf3c5f481.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/a1281c14-c66f-4e3e-83b7-d467083aaa35.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/a9915321-3642-4ad0-a80e-3834e0cf320c.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/bbc1f697-8358-4dbd-a8ab-d7019d8d0d1f.AnB" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/bbc1f697-8358-4dbd-a8ab-d7019d8d0d1f.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ofmc/user-created/ee73b5f3-143d-414d-901f-1f9078d49463.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/CodeEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/CodeEditor.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ProtocolFilter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProtocolFilter.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ofmc/user-created/9e161468-c6e4-42c5-b8f7-5b3614aa01f4.AnB" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/9e161468-c6e4-42c5-b8f7-5b3614aa01f4.AnB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Modals/LoginModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Modals/LoginModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Modals/NoUserModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Modals/NoUserModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Modals/OfmcSettingsModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Modals/OfmcSettingsModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Modals/PublishModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Modals/PublishModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Modals/SignupModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Modals/SignupModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers/server/parseOfmcOutput.ts" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/server/parseOfmcOutput.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/0.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/0e257f07-7c4d-493c-8eae-790c4016876a.AnB" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/051c7094-6a33-4dcb-b9bf-e250afde356a.AnB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/1.AnB" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/99d6d3f6-046b-4d0d-bbd7-f10f45163699.AnB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/1654097528554.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/1654097831407.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/1654256289400.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/1654264596806.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/307d0019-246c-4cce-99a7-ff98af358bb3.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/3d5f8b6c-8506-4fcb-a80b-a6976e9647a3.AnB" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/ee73b5f3-143d-414d-901f-1f9078d49463.AnB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/4cb279da-1b18-4e3f-8a2f-c47ec26649f3.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/521960e0-bfec-4658-b702-0f6cebc17b98.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/521960e0-bfec-4658-b702-0f6cebc17b98.log" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/3124b674-4873-44a8-b517-ee1d3c18fa9b.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/5320b1a8-7153-4cc7-8b0e-389f5b8f293d.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/557827cf-da56-4dad-be9b-b40f2b9d39cb.AnB" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/9d0601fb-d061-46d7-892f-a7ddf3c5f481.AnB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/66313be7-bb11-4979-8cd9-e067faf2da0f.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/6f2e3566-1034-4667-a77a-dfef19c3628c.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/703ea0da-03a2-4e1d-9e46-7d6d6250bb9b.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/7dffabb1-b070-4ba9-a69b-93febd1b277d.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/7e4c9455-37a9-4532-bf77-e84068187058.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/8476f508-5a63-4274-b5b1-b5948f506935.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/9e161468-c6e4-42c5-b8f7-5b3614aa01f4.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/9f0252fd-c86a-4eee-a457-fb9cbd0cce83.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/a1aec9ba-c50b-458f-b4a0-cedec71d4b66.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/a713762f-166c-4c59-a8be-9ef95d234605.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/a7ec1ebc-c20f-4d61-bd56-1a803ac2b299.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/b22c1f10-b451-4364-b6da-6d95e6bb4bbb.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/bb749819-6953-4081-a749-4be804590c6d.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/c20d654d-9a02-42ce-ad8a-bb8d347fbc8d.AnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/d66d97db-a323-4078-b8fd-d2d4aeb30202.AnB" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/a1281c14-c66f-4e3e-83b7-d467083aaa35.AnB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ofmc/user-created/eeac9404-22c3-4c72-a3bf-5fe0314a88c3.AnB" beforeDir="false" afterPath="$PROJECT_DIR$/ofmc/user-created/a9915321-3642-4ad0-a80e-3834e0cf320c.AnB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/protocols/[id].ts" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/protocols/[id].ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/protocols/run/[id].ts" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/protocols/run/[id].ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/protocol/[...slug].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/protocol/[...slug].tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recoil/atoms/protocol.ts" beforeDir="false" afterPath="$PROJECT_DIR$/recoil/atoms/protocol.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recoil/atoms/ofmcSettings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/recoil/atoms/ofmcSettings.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/types/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/types/formattedOutput.ts" beforeDir="false" afterPath="$PROJECT_DIR$/types/formattedOutput.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +113,7 @@
     &quot;nodejs.jest.jest_package&quot;: &quot;/Users/loui/Documents/GitHub/ofmc-web/node_modules/jest&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/loui/Documents/GitHub/ofmc-web/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -81,7 +132,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Jest.Home">
-    <configuration name="Home" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="Home" type="JavaScriptTestRunnerJest" temporary="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/jest" />
@@ -167,7 +218,9 @@
       <workItem from="1654841672034" duration="61000" />
       <workItem from="1655029436045" duration="33000" />
       <workItem from="1655032479113" duration="2000" />
-      <workItem from="1655033101483" duration="5238000" />
+      <workItem from="1655033101483" duration="7478000" />
+      <workItem from="1655321119073" duration="2542000" />
+      <workItem from="1655365219941" duration="8304000" />
     </task>
     <servers />
   </component>
