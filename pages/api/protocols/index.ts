@@ -46,10 +46,14 @@ const handle = async (req: NextApiRequest, res: NextApiResponse) => {
             templateId: req.body.templateId,
             startingCode: defaultStartingCode,
         }
-        await writeNewProtocol(protocol, req.body.userId)
-        res.status(200).json({ protocol })
+        await writeNewProtocol(protocol, req.body.userId).then(() => {
+            res.status(201).json({ protocol })
+        }).catch((err) => {
+            res.status(500).json({ error: err })
+        })
     } else if (req.method === 'GET') {
         const { userId } = req.query
+
         const db = getDatabase()
         const protocolsRef = ref(db, 'protocols')
         return get(protocolsRef).then((snapshot) => {

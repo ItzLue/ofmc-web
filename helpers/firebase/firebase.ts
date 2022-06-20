@@ -3,6 +3,7 @@ import { getStorage } from '@firebase/storage'
 import { getFirestore } from 'firebase/firestore/lite';
 import { getAuth, GithubAuthProvider } from '@firebase/auth'
 
+
 const clientCredentials = {
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_GOOGLE_AUTH_DOMAIN,
@@ -19,4 +20,3 @@ export const storage = getStorage()
 const db = getFirestore(app)
 export const auth = getAuth()
 export const provider = new GithubAuthProvider()
-

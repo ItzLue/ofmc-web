@@ -54,7 +54,7 @@ const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreated
     )
 
     return (
-        <div className='bg-gradient-to-r from-[#ADC9FB] h-1/3'>
+        <div className='bg-gradient-to-r from-[#ADC9FB] h-1/3 relative'>
             <div className='flex flex-row-reverse'>
                 {user && (
                     <div className='flex inline-flex gap-2 mt-4 mr-4'>

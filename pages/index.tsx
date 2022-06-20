@@ -13,6 +13,7 @@ import LoginModal from '@/components/Modals/LoginModal'
 import SignupModal from '@/components/Modals/SignupModal'
 import NewProtocolModal from '@/components/Modals/NewProtocolModal'
 import { AiFillPlusCircle } from 'react-icons/ai'
+import axiosInstance from '@/helpers/axios'
 
 type IProps = {
     templates: IProtocol[]
@@ -40,8 +41,12 @@ const Home: NextPage<IProps> = ({ templates }) => {
         })
     }
 
-    const fetchProtocols = useCallback(() => {
-        axios.get(`/api/protocols`, { params: { userId: user?.uid } }).then((r) => {
+    const fetchProtocols = useCallback(async () => {
+        axiosInstance.get(`/api/protocols`, {
+            params: {
+                userId: user?.uid,
+            },
+        }).then((r) => {
             setPrivateProtocols(r.data.private)
             setPublicProtocols(r.data.public)
         })
@@ -59,14 +64,14 @@ const Home: NextPage<IProps> = ({ templates }) => {
                 .sort(
                     (a, b) =>
                         newArray.filter((p) => p === a).length -
-                        newArray.filter((p) => p === b).length
+                        newArray.filter((p) => p === b).length,
                 )
                 .pop()?.type || 'none'
         )
     }
 
     return (
-        <div className="h-screen w-screen">
+        <div className='h-screen w-screen'>
             <Hero
                 mostCompletedType={getMostCompletedType(privateProtocols)}
                 totalCompleted={privateProtocols.filter((p) => p.isComplete).length}
@@ -74,11 +79,11 @@ const Home: NextPage<IProps> = ({ templates }) => {
                 onOpenLoginModal={() => setShowLoginModal(true)}
                 onOpenSignUpModal={() => setShowSignUpModal(true)}
             />
-            <main className="px-12">
-                <div className="flex mt-6 justify-center items-center">
+            <main className='px-12'>
+                <div className='flex mt-6 justify-center items-center'>
                     {user && (
                         <AiFillPlusCircle
-                            className="text-3xl cursor-pointer h-8 w-8 text-blue-500 hover:text-blue-700"
+                            className='text-3xl cursor-pointer h-8 w-8 text-blue-500 hover:text-blue-700'
                             onClick={() => setShowCreateProtocolModal(true)}
                         />
                     )}

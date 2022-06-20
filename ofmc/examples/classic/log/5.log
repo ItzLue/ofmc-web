@@ -1,5 +1,6 @@
+Open-Source Fixedpoint Model-Checker version 2020
 INPUT:
-   ofmc/user-created/3d90e431-f1e7-4b12-b73d-11ea25db25cf.anB
+   IKEv2-DS.AnB
 SUMMARY:
   NO_ATTACK_FOUND
 GOAL:
@@ -9,8 +10,6 @@ DETAILS:
 BACKEND:
   Open-Source Fixedpoint Model-Checker version 2020
 STATISTICS:
-  TIME 9438 ms
-  parseTime 1 ms
   visitedNodes: 9046 nodes
   depth: 12 plies
 

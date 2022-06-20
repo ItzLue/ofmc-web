@@ -1,14 +1,14 @@
 import React from 'react'
 import { useRecoilState } from 'recoil'
 import { Tab } from '@headlessui/react'
-import selectedTabState from '../recoil/atoms/tabs'
+import selectedProtocolTab from '../recoil/atoms/tabs'
 import { NextPage } from 'next'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '@/helpers/firebase/firebase'
 
 const ProtocolTabs: NextPage = () => {
     const [user] = useAuthState(auth)
-    const [selectedTab, setSelectedTab] = useRecoilState(selectedTabState)
+    const [selectedTab, setSelectedTab] = useRecoilState(selectedProtocolTab)
 
     return (
         <div className="w-full flex justify-center">

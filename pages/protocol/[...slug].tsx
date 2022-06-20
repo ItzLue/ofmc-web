@@ -17,6 +17,8 @@ import CreateSvg from '@/components/CreateSvg'
 import PublishModal from '@/components/Modals/PublishModal'
 import NoUserModal from '@/components/Modals/NoUserModal'
 import EAPICallState from '@/types/api'
+import selectedProtocolTab from '../../recoil/atoms/tabs'
+import attackTabState from '../../recoil/atoms/attackTab'
 
 // https://www.codementor.io/@johnnyb/fireedit-real-time-editor-javascript-firebase-59lnmf3c6
 const Home: NextPage = () => {
@@ -34,6 +36,18 @@ const Home: NextPage = () => {
     const [protocolId, setProtocolId] = useState('')
     const [showPublishModal, setShowPublishModal] = useState(false)
     const ofmcSettings = useRecoilValue(ofmcSettingsState)
+    const [animation, setAnimation] = useState(true)
+    const selectedTab = useRecoilValue(attackTabState)
+
+
+    useEffect(() => {
+        if (selectedTab === "3") {
+            setTimeout(() => {
+                setAnimation(false)
+            }, 500)
+        }
+
+    }, [selectedTab])
 
     const router = useRouter()
 
@@ -65,6 +79,7 @@ const Home: NextPage = () => {
             .then((res) => {
                 setResult(res.data)
                 setCallState(EAPICallState.SUCCESS)
+                setAnimation(true)
             })
             .catch(() => setCallState(EAPICallState.ERROR))
     }
@@ -86,14 +101,14 @@ const Home: NextPage = () => {
     }
 
     return (
-        <div className="flex flex-col gap-6 overflow-y-hidden h-screen bg-primary">
+        <div className='flex flex-col gap-6 overflow-y-hidden h-screen bg-primary'>
             <Head>
                 <title>Ofmc</title>
-                <meta name="description" content="Ofmc web interface" />
-                <link rel="icon" href="/favicon.ico" />
+                <meta name='description' content='Ofmc web interface' />
+                <link rel='icon' href='/favicon.ico' />
             </Head>
             <TopNav />
-            <div className="flex gap-6 flex-shrink h-full px-6">
+            <div className='flex gap-6 flex-shrink h-full px-6'>
                 <CodeEditor
                     protocolId={protocolId}
                     code={code}
@@ -103,7 +118,7 @@ const Home: NextPage = () => {
                     showNoUserModal={() => setNoUserModal(true)}
                     isLoading={callState === EAPICallState.LOADING}
                 />
-                <div className="flex flex-col w-1/2 bg-vs-code overflow-ellipsis">
+                <div className='flex flex-col w-1/2 bg-vs-code overflow-ellipsis'>
                     <Tabs
                         isLoading={callState === EAPICallState.LOADING}
                         onPublish={
@@ -114,7 +129,7 @@ const Home: NextPage = () => {
                                 key: '1',
                                 label: 'Simplified',
                                 content: (
-                                    <div className="w-full h-screen text-white overflow-auto">
+                                    <div className='w-full h-screen text-white overflow-auto'>
                                         <AttackSimplified result={result?.parsed} />
                                     </div>
                                 ),
@@ -123,13 +138,13 @@ const Home: NextPage = () => {
                                 key: '2',
                                 label: 'Raw output',
                                 content: (
-                                    <div className="text-white overflow-auto h-screen">
+                                    <div className='text-white overflow-auto h-screen'>
                                         {result?.raw.split('\n').map((line, i) =>
                                             line ? (
-                                                <div className="pl-2" key={i}>
+                                                <div className='pl-2 break-words' key={i}>
                                                     {line}
                                                 </div>
-                                            ) : null
+                                            ) : null,
                                         )}
                                     </div>
                                 ),
@@ -138,11 +153,12 @@ const Home: NextPage = () => {
                                 key: '3',
                                 label: 'Diagram',
                                 content: (
-                                    <div className="text-white overflow-auto h-screen bg-vs-code flex items-center">
-                                        <div className="w-full h-full flex flex-grow align-middle justify-center">
+                                    <div className='text-white overflow-auto h-screen bg-vs-code flex items-center'>
+                                        <div className='w-full h-full flex flex-grow align-middle justify-center'>
                                             {result?.parsed.attackTrace && (
                                                 <CreateSvg
                                                     attackTrace={result.parsed.attackTrace}
+                                                    animation={animation}
                                                 />
                                             )}
                                         </div>

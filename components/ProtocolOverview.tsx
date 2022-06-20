@@ -2,7 +2,7 @@ import React from 'react'
 import { IProtocol } from '@/types/protocol'
 import ProtocolItemList from '@/components/ProtocolItemList'
 import { useRecoilValue } from 'recoil'
-import selectedTabState from '../recoil/atoms/tabs'
+import selectedProtocolTab from '../recoil/atoms/tabs'
 
 type IProps = {
     privateProtocols: IProtocol[]
@@ -11,7 +11,7 @@ type IProps = {
     onRefresh: () => void
 }
 const ProtocolOverview: React.FC<IProps> = ({ privateProtocols, templates, onRefresh,publicProtocols }) => {
-    const selectedTab = useRecoilValue(selectedTabState)
+    const selectedTab = useRecoilValue(selectedProtocolTab)
 
     return (
         <div className="grid grid-flow-col-dense gap-8">

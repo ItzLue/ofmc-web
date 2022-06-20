@@ -11,7 +11,7 @@ type IProps = {
     onSubmit: (data: ICreateProtocol) => void
 }
 const NewProtocolModal: React.FC<IProps> = ({ isOpen, onClose, onSubmit }) => {
-    const { register, handleSubmit } = useForm<ICreateProtocol>()
+    const { register, handleSubmit, formState: { errors } } = useForm<ICreateProtocol>()
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -44,14 +44,16 @@ const NewProtocolModal: React.FC<IProps> = ({ isOpen, onClose, onSubmit }) => {
                                 >
                                     Name
                                 </label>
-                                <input {...register('name')} />
+                                <input {...register('name', { required: true })} />
+                                <span className="text-red-700">{errors.name && 'Name is required'}</span>
                                 <label
                                     className='block text-sm font-medium leading-5 text-gray-700'
                                     htmlFor='type'
                                 >
                                     Type
                                 </label>
-                                <input {...register('type')} />
+                                <input {...register('type', { required: true })} />
+                                <span className="text-red-700">{errors.type && 'Type is required'}</span>
                                 <button
                                     type='submit'
                                     className='inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'

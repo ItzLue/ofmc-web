@@ -1,8 +1,9 @@
 import { NextPage } from 'next'
-import { useState } from 'react'
 import { ITab } from '@/types/tabs'
 import Button from '@/components/Button'
 import Loader from '@/components/Loader'
+import { useRecoilState } from 'recoil'
+import attackTabState from '../recoil/atoms/attackTab'
 
 type IProps = {
     className?: string
@@ -13,7 +14,7 @@ type IProps = {
 }
 
 const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab, onPublish, isLoading }) => {
-    const [activeTab, setActiveTab] = useState(defaultTab ?? '1')
+    const [activeTab, setActiveTab] = useRecoilState(attackTabState)
 
     return (
         <div>
