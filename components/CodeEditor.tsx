@@ -23,14 +23,14 @@ type IProps = {
 }
 
 const CodeEditor: NextPage<IProps> = ({
-    code,
-    onChange,
-    onSubmit,
-    protocolName,
-    protocolId,
-    showNoUserModal,
-    isLoading,
-}) => {
+                                          code,
+                                          onChange,
+                                          onSubmit,
+                                          protocolName,
+                                          protocolId,
+                                          showNoUserModal,
+                                          isLoading,
+                                      }) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
     const [user] = useAuthState(auth)
     const uploadRef = useRef(null)
@@ -105,66 +105,76 @@ const CodeEditor: NextPage<IProps> = ({
     }
 
     return (
-        <div className="w-1/2 h-full">
-            <div className="flex justify-between bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white">
-                <div className="inline-flex gap-2 ml-4 items-center">
+        <div className='w-1/2 h-full'>
+            <div
+                className='flex justify-between bg-gray-800 w-full gap-4 h-8 rounded-tl-lg rounded-tr-lg items-center overflow-y-hidden text-white'>
+                <div className='inline-flex gap-2 ml-4 items-center'>
                     {user && changeName ? (
                         <input
-                            type="text"
+                            name='name'
+                            type='text'
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="bg-vs-code text-white"
+                            className='bg-vs-code text-white'
                         />
                     ) : (
                         <span>{name}</span>
                     )}
                     {user && !changeName ? (
                         <BiEdit
-                            className="text-white h-4 w-4 cursor-pointer"
+                            cy-data='change-name'
+                            className='text-white h-4 w-4 cursor-pointer'
                             onClick={() => setChangeName(!changeName)}
                         />
                     ) : (
                         <ImCross
+                            cy-data='cancel-change-name'
                             className={`text-red-700 h-4 w-4 cursor-pointer ${!user && 'hidden'}`}
                             onClick={() => setChangeName(!changeName)}
                         />
                     )}
                     {user && changeName && (
                         <ImCheckmark
-                            className="text-green-500 h-4 w-4 cursor-pointer"
+                            cy-data='accept-change-name'
+                            className='text-green-500 h-4 w-4 cursor-pointer'
                             onClick={onChangeName}
                         />
                     )}
                 </div>
-                <div className="flex flex-row-reverse items-center gap-4">
+                <div className='flex flex-row-reverse items-center gap-4'>
                     <Button
-                        className="p-2 bg-blue-700 rounded-tr-lg hover:bg-blue-900"
-                        type="button"
+                        cy-data='run-code-button'
+                        className='p-2 bg-blue-700 rounded-tr-lg hover:bg-blue-900'
+                        type='button'
                         onClick={user ? onSubmit : showNoUserModal}
                         loading={isLoading}
                     >
                         Run code
                     </Button>
                     <div>
-                        <VisuallyHidden className="relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content">
+                        <VisuallyHidden
+                            className='relative border border-solid border-grey-lightest w-full rounded-3xl pb-full box-content'>
                             <input
                                 disabled={!user}
-                                type="file"
-                                id="file"
-                                accept=".AnB"
+                                type='file'
+                                id='file'
+                                accept='.AnB'
                                 onChange={handleFileUpload}
                                 ref={uploadRef}
                             />
                         </VisuallyHidden>
-                        <label htmlFor="file" className="cursor-pointer">
+                        <label htmlFor='file' className='cursor-pointer'>
                             <FiUpload
-                                className="h-4 w-4"
+                                cy-data='upload-button'
+                                className='h-4 w-4'
                                 onClick={() => !user && showNoUserModal()}
                             />
                         </label>
                     </div>
-                    <FiDownload className="h-4 w-4 cursor-pointer" onClick={handleFileDownload} />
+                    <FiDownload cy-data='download-button'
+                                className='h-4 w-4 cursor-pointer' onClick={handleFileDownload} />
                     <FiSettings
+                        cy-data='settings-button'
                         onClick={() => {
                             if (!user) {
                                 showNoUserModal()
@@ -172,15 +182,15 @@ const CodeEditor: NextPage<IProps> = ({
                                 setIsSettingsOpen(true)
                             }
                         }}
-                        className="w-4 h-4 cursor-pointer"
+                        className='w-4 h-4 cursor-pointer'
                     />
                 </div>
             </div>
             <Editor
-                theme="AnBTheme"
+                theme='AnBTheme'
                 value={code}
-                height="100%"
-                language="AnB"
+                height='100%'
+                language='AnB'
                 onChange={(value) => onChange(value || '')}
                 options={{
                     minimap: {

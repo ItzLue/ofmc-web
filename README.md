@@ -1,34 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Installation 
 
-## Getting Started
+Dette projekt kræver [NodeJS](https://nodejs.org/en/). For yderligere hjælp, se [NextJs dokumentationen](https://nextjs.org/docs)
 
-First, run the development server:
+Når NodeJs er installeret, skal du køre følgende kommando fra projektmappen:
+```bash
+npm install
+```
+Dette henter alle pakkerne som er i package.json filen og nødvendigt for projektet. (Det kan godt tage lidt tid, hvis det er første gang at dette køres).
 
+Herefter er projektet klar til at blive startet, dette gøres ved at køre følgende kommando:
 ```bash
 npm run dev
-# or
-yarn dev
 ```
+Der startes herved en lokal server på [http://localhost:3000](http://localhost:3000), der kan tilgås via en browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Folder struktur 
+Der er brugt NextJs og folderstrukturen er som følger:
 
-You can start editing the page by modifying `pages/[...slug].tsx`. The page auto-updates as you edit the file.
+    - components
+    - helpers
+        - firebase
+            - protocols
+            - user
+        - server
+    - ofmc
+        - templates
+        - examples
+        - user-created
+    - pages
+        - api
+        - protocol
+    - public
+    - recoil
+        - atoms
+    - types
+    - styles
+    - package.json
+    - README.md
+    - .gitignore
+    - .editorconfig
+    - .eslintrc.js
+    - .prettierrc.js
+    - .stylelintrc.js...
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/[id].ts`.
+Alt routing ligger i mappen [pages](./pages), der en mappe til de routes som er til Api'et i [api](./api) disse endpoints kan tilgås eksempelvis kan templates hentes på [http://localhost:3000/api/templates](http://localhost:3000/api/tempaltes). 
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Der ligger content på index siden på [http://localhost:3000](http://localhost:3000/), og på localhost:3000/protocol... her kræves det dog at der er valgt en templates hvis ikke man er logget ind eller at man logget ind og har valgt en protokol. 
+Hvis ikke dette er opfyldt vil man redirected til forsiden.
 
-## Learn More
+Api og routning af siderne er ydereligere beskrevet i rapporten. 
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

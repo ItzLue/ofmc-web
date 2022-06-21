@@ -36,7 +36,7 @@ const ProtocolItem: React.FC<IProps> = ({ protocol,onReFresh }) => {
 
 
     return (
-        <div className='flex max-w-max max-h-max bg-white items-center p-2 border shadow justify-between rounded-lg gap-4'>
+        <div className='flex max-w-max max-h-max bg-white items-center p-2 border shadow justify-between rounded-lg gap-4' data-cy={protocol.uid}>
             {(user && isTemplate || isPublic) ? (
                 <button className='font-medium hover:text-blue-700' onClick={onCopyProtocol}>{name}</button>) : (
                 <Link href={{

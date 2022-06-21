@@ -78,15 +78,16 @@ const NoUserModal: NextPage<IProps> = ({ isOpen, onClose }) => {
                             </Dialog.Title>
 
                             <form onSubmit={handleSubmit(onSignUp)} className="flex flex-col gap-4">
-                                <label htmlFor="Username">Username</label>
+                                <label htmlFor="username">Username</label>
                                 <input type="text" {...register('username')} />
 
                                 <label htmlFor="email">Email</label>
                                 <input type="email" {...register('email')} />
-                                <label htmlFor="depth">Password</label>
+                                <label htmlFor="password">Password</label>
                                 <input type="password" {...register('password')} />
                                 <button
                                     type="submit"
+                                    data-cy='sign-up-button'
                                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                 >
                                     Sign up

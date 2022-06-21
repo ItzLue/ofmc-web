@@ -1,11 +1,6 @@
 import React from 'react'
 import { NextPage } from 'next'
-import {
-    browserSessionPersistence,
-    GithubAuthProvider,
-    setPersistence,
-    signInWithPopup, signOut,
-} from '@firebase/auth'
+import { signOut } from '@firebase/auth'
 import { auth } from '@/helpers/firebase/firebase'
 import Image from 'next/image'
 import Infobox from '@/components/Infobox'
@@ -68,7 +63,7 @@ const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreated
                                 width={24}
                             />
                         )}
-                        <button onClick={logout}>Log out</button>
+                        <button onClick={logout} data-cy='log-out-button'>Log out</button>
                     </div>
                 )}
             </div>
@@ -77,8 +72,8 @@ const Hero: NextPage<IProps> = ({ totalCompleted, mostCompletedType, userCreated
             ) : (
                 <div className='flex justify-end mt-2 mr-2'>
                     <div className="flex gap-4">
-                        <button onClick={onOpenLoginModal}>Login</button>
-                        <button className='px-4 border border-transparent bg-blue-500 rounded-full py-2 text-white' onClick={onOpenSignUpModal}>Sign up</button>
+                        <button onClick={onOpenLoginModal} data-cy='log-in-button'>Login</button>
+                        <button className='px-4 border border-transparent bg-blue-500 rounded-full py-2 text-white' onClick={onOpenSignUpModal} data-cy='sign-up-button'>Sign up</button>
                     </div>
                 </div>
             )}

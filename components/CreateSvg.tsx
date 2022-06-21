@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { NextPage } from 'next'
 import { IAttackTrace } from '@/types/formattedOutput'
 import { motion } from 'framer-motion'
-import { useRecoilValue } from 'recoil'
-import selectedProtocolTab from '../recoil/atoms/tabs'
 
 type IProps = {
     attackTrace: IAttackTrace[]
@@ -15,7 +13,7 @@ type IProps = {
 const draw = {
     hidden: { pathLength: 0, opacity: 0 },
     visible: (i: number) => {
-        const delay = 1 + i * 0.8
+        const delay = 1 + i * 0.4
         return {
             pathLength: 1,
             opacity: 1,
@@ -35,9 +33,11 @@ const CreateSvg: NextPage<IProps> = ({ attackTrace, animation }) => {
     const [divPosition, setDivPosition] = useState<{ x: number, y: number }>({ x: 150, y: 50 })
     const [showDiv, setShowDiv] = useState(false)
 
-    const onHoverStart = (e: MouseEvent, text: string) => {
+    const wrapperRef = useRef<HTMLDivElement>(null)
+
+    const onHoverStart = (e: MouseEvent, text: string, x: number, y: number) => {
         setPayload(text)
-        setDivPosition({ x: (window.innerWidth - 500) - e.x, y: 0 })
+        setDivPosition({ x: x, y: y })
         setShowDiv(true)
     }
 
@@ -74,53 +74,48 @@ const CreateSvg: NextPage<IProps> = ({ attackTrace, animation }) => {
 
             return (
                 <>
-                    {/* <text x={step.x2} y={step.y1 - 10} textAnchor='middle' fontSize={16}
-                          className='fill-white'>{attackTrace[index].payload}</text>*/}
                     <motion.line x1={step.x1} y1={step.y1} x2={step.x2} y2={step.y2}
                                  className='stroke-white stroke-2'
-                                 custom={index} variants={draw}
-                                 onHoverStart={(event) => onHoverStart(event, attackTrace[index].payload)}
-                                 onHoverEnd={() => setShowDiv(false)} />
+                                 custom={index}
+                                 variants={draw} />
                     {direction === 'right' ? (<>
                         <motion.line x1={step.x2 - 10} y1={step.y1 + 10} x2={step.x2} y2={step.y2}
                                      className='stroke-2 stroke-white' custom={index} variants={draw} />
                         <motion.line x1={step.x2} y1={step.y1} x2={step.x2 - 10} y2={step.y2 - 10}
                                      className='stroke-2 stroke-white' custom={index} variants={draw} />
+                        <motion.text x={step.x1 + 10} y={step.y2 + 15}
+                                     className='fill-white'
+                                     onHoverStart={(event) => onHoverStart(event, attackTrace[index].payload, step.x1, step.y1)}
+                                     custom={index}
+                                     variants={draw}>Step {attackTrace[index].step}</motion.text>
                     </>) : (
                         <>
                             <motion.line x1={step.x2 + 10} y1={step.y2 + 10} x2={step.x2} y2={step.y1}
                                          className='stroke-2 stroke-white' custom={index} variants={draw} />
                             <motion.line x1={step.x2} y1={step.y2} x2={step.x2 + 10} y2={step.y1 - 10}
                                          className='stroke-2 stroke-white' custom={index} variants={draw} />
+                            <motion.text x={step.x2 + 15} y={step.y2 + 15} className='fill-white'
+                                         onHoverStart={(event) => onHoverStart(event, attackTrace[index].payload, step.x1, step.y1)}
+                                         custom={index}
+                                         variants={draw}
+                            >Step {attackTrace[index].step}</motion.text>
                         </>
                     )}
                 </>)
         })
     }
 
-    /*
     return (
-    <>
-        <text x={50 * (index * 2)} y={50 * (index)} textAnchor='middle' fontSize={12}
-              className='fill-white'>{a.step}</text>
-        <line x1={60} y1='50' x2='100' y2='50' className='stroke-2 stroke-white' />
-        <line x1='190.0' y1='40' x2='200.0' y2='50' className='stroke-2 stroke-white' />
-        <line x1='190.0' y1='60' x2='200.0' y2='50' className='stroke-1 stroke-white' />
-    </>
-    )
-
-    */
-
-    return (
-        <div className='relative'>
+        <div className='relative' ref={wrapperRef}>
             <motion.svg className='h-full z-0' width={500} height='100%' initial={animation ? 'hidden' : 'visible'}
                         animate='visible'>
                 {makeActorNames(actors)}
                 {makeVerticalLines(actors, attackTrace.length)}
                 {makeArrowsWPayload(attackTrace)}
             </motion.svg>
-            <div className={`${showDiv ? 'absolute' : 'hidden'} bg-blue-500 z-20 opacity-70 min-w-min p-2 rounded-full word-break`}
-                 style={{ left: `${divPosition.x}px `, top: '30px' }}>
+            <div
+                className={`${showDiv ? 'absolute' : 'hidden'} bg-blue-500 z-20 min-w-min p-4 rounded-full break-all select-none`}
+                style={{ left: 0, top: `${divPosition.y}px` }}>
                 {payload}
             </div>
         </div>

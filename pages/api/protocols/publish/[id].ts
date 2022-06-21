@@ -17,7 +17,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
                     protocol = snapshot.val()
                 })
                 .catch((error) => {
-                    console.log(error)
+                    console.error(error)
+                    return res.status(500).json({ message: error.message })
                 })
 
             const newID = uuidv4().toString()
@@ -30,10 +31,13 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
                         urlSlug: protocol.urlSlug,
                         type: protocol.type,
                         isComplete: protocol.isComplete ?? false,
-                        userCode: protocol.userCode || protocol.startingCode,
+                        userCode: protocol.userCode ?? protocol.startingCode,
                         isPublic: true,
                     }).then(() => res.status(201).json({ message: 'Protocol published' }))
-                        .catch((e) => console.log(e))
+                        .catch((error) => {
+                            console.error(error)
+                            return res.status(500).json({ message: error.message })
+                        })
                 }
             })
         } else return res.status(500).json({ message: 'Method not allowed' })

@@ -44,12 +44,12 @@ const handle = async (req: NextApiRequest, res: NextApiResponse) => {
             type: req.body.type,
             isTemplate: req.body.isTemplate,
             templateId: req.body.templateId,
-            startingCode: defaultStartingCode,
+            startingCode: req.body.userCode || defaultStartingCode,
         }
         await writeNewProtocol(protocol, req.body.userId).then(() => {
             res.status(201).json({ protocol })
-        }).catch((err) => {
-            res.status(500).json({ error: err })
+        }).catch((error) => {
+            res.status(500).json({ error: error.message })
         })
     } else if (req.method === 'GET') {
         const { userId } = req.query

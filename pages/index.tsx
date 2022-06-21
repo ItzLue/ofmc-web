@@ -13,7 +13,6 @@ import LoginModal from '@/components/Modals/LoginModal'
 import SignupModal from '@/components/Modals/SignupModal'
 import NewProtocolModal from '@/components/Modals/NewProtocolModal'
 import { AiFillPlusCircle } from 'react-icons/ai'
-import axiosInstance from '@/helpers/axios'
 
 type IProps = {
     templates: IProtocol[]
@@ -42,7 +41,7 @@ const Home: NextPage<IProps> = ({ templates }) => {
     }
 
     const fetchProtocols = useCallback(async () => {
-        axiosInstance.get(`/api/protocols`, {
+        axios.get(`/api/protocols`, {
             params: {
                 userId: user?.uid,
             },

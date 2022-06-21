@@ -17,8 +17,8 @@ import CreateSvg from '@/components/CreateSvg'
 import PublishModal from '@/components/Modals/PublishModal'
 import NoUserModal from '@/components/Modals/NoUserModal'
 import EAPICallState from '@/types/api'
-import selectedProtocolTab from '../../recoil/atoms/tabs'
 import attackTabState from '../../recoil/atoms/attackTab'
+import ErrorModal from '@/components/Modals/ErrorModal'
 
 // https://www.codementor.io/@johnnyb/fireedit-real-time-editor-javascript-firebase-59lnmf3c6
 const Home: NextPage = () => {
@@ -37,11 +37,12 @@ const Home: NextPage = () => {
     const [showPublishModal, setShowPublishModal] = useState(false)
     const ofmcSettings = useRecoilValue(ofmcSettingsState)
     const [animation, setAnimation] = useState(true)
+    const [showErrorModal, setShowErrorModal] = useState(false)
     const selectedTab = useRecoilValue(attackTabState)
 
 
     useEffect(() => {
-        if (selectedTab === "3") {
+        if (selectedTab === '3') {
             setTimeout(() => {
                 setAnimation(false)
             }, 500)
@@ -67,7 +68,10 @@ const Home: NextPage = () => {
                     setProtocolName(res.data.protocol.name)
                     setCallState(EAPICallState.SUCCESS)
                 })
-                .catch(() => setCallState(EAPICallState.ERROR))
+                .catch(() => {
+                    setCallState(EAPICallState.ERROR)
+                    setShowErrorModal(true)
+                })
         }
         if (!id && router.isReady) router.push('/')
     }, [protocolId, router.query.id, router.isReady, router.query.template, router])
@@ -81,7 +85,10 @@ const Home: NextPage = () => {
                 setCallState(EAPICallState.SUCCESS)
                 setAnimation(true)
             })
-            .catch(() => setCallState(EAPICallState.ERROR))
+            .catch(() => {
+                setShowErrorModal(true)
+                setCallState(EAPICallState.ERROR)
+            })
     }
 
     const onChange = (value: string) => {
@@ -176,6 +183,7 @@ const Home: NextPage = () => {
                 isLoading={callState === EAPICallState.LOADING}
             />
             <NoUserModal isOpen={noUserModal} onClose={() => setNoUserModal(false)} />
+            <ErrorModal isOpen={showErrorModal} onClose={() => setShowErrorModal(false)} />
         </div>
     )
 }

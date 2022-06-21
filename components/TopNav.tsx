@@ -12,6 +12,7 @@ const TopNav: NextPage = () => {
     return (
         <nav className="flex items-center justify-between w-full h-fit px-6 text-white">
             <button
+                cy-data='back-button'
                 type="button"
                 className="bg-gray-800 px-2 p-1 rounded-bl-lg rounded-br-lg hover:bg-blue-800"
                 onClick={() => router.back()}

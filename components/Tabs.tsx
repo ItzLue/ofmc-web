@@ -33,6 +33,7 @@ const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab, onPublish, i
                                         : 'cursor-pointer hover:text-amber-600'
                                 }`}
                                 type="button"
+                                cy-data={tab.key}
                                 onClick={() => setActiveTab(tab.key)}
                                 key={tab.key}
                                 disabled={tab.disabled}
@@ -43,6 +44,7 @@ const Tabs: NextPage<IProps> = ({ className = '', tabs, defaultTab, onPublish, i
                     </div>
                     {onPublish && (
                         <Button
+                            cy-data='publish-button'
                             loading={isLoading}
                             type="button"
                             onClick={onPublish}

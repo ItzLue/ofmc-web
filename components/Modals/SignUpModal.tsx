@@ -65,11 +65,11 @@ const SignUpModal: NextPage<IProps> = ({ isOpen, onClose }) => {
 
                             <form onSubmit={handleSubmit(onSignUp)} className="flex flex-col gap-4">
                                 <label htmlFor="Username">Username</label>
-                                <input type="text" {...register('username')} />
+                                <input type="text" id="username" {...register('username')} />
                                 <label htmlFor="email">Email</label>
-                                <input type="email" {...register('email')} />
-                                <label htmlFor="depth">Password</label>
-                                <input type="password" {...register('password')} />
+                                <input type="email" id="email" {...register('email')} />
+                                <label htmlFor="password">Password</label>
+                                <input type="password" id="password" {...register('password')} />
                                 <button
                                     type="submit"
                                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
