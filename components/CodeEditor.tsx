@@ -22,15 +22,7 @@ type IProps = {
     isLoading: boolean
 }
 
-const CodeEditor: NextPage<IProps> = ({
-                                          code,
-                                          onChange,
-                                          onSubmit,
-                                          protocolName,
-                                          protocolId,
-                                          showNoUserModal,
-                                          isLoading,
-                                      }) => {
+const CodeEditor: NextPage<IProps> = ({ code, onChange, onSubmit, protocolName, protocolId, showNoUserModal, isLoading, }) => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
     const [user] = useAuthState(auth)
     const uploadRef = useRef(null)

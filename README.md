@@ -18,6 +18,12 @@ Der startes herved en lokal server på [http://localhost:3000](http://localhost:
 Der er brugt NextJs og folderstrukturen er som følger:
 
     - components
+    - cypress
+        - downloads
+        - e2e
+        - screenshots
+        - support
+        - videos
     - helpers
         - firebase
             - protocols
@@ -49,4 +55,7 @@ Der ligger content på index siden på [http://localhost:3000](http://localhost:
 Hvis ikke dette er opfyldt vil man redirected til forsiden.
 
 Api og routning af siderne er ydereligere beskrevet i rapporten. 
+
+## Tests
+Tests i Cypress kan køres via terminal ved at skrive `cypress run` og i Cypress UI ved at køre `npx cypress run`
 

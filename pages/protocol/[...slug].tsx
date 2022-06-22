@@ -40,7 +40,6 @@ const Home: NextPage = () => {
     const [showErrorModal, setShowErrorModal] = useState(false)
     const selectedTab = useRecoilValue(attackTabState)
 
-
     useEffect(() => {
         if (selectedTab === '3') {
             setTimeout(() => {
@@ -104,7 +103,10 @@ const Home: NextPage = () => {
                 setShowPublishModal(false)
                 setCallState(EAPICallState.SUCCESS)
             })
-            .catch(() => setCallState(EAPICallState.ERROR))
+            .catch(() => {
+                setCallState(EAPICallState.ERROR)
+                setShowErrorModal(true)
+            })
     }
 
     return (
@@ -163,10 +165,10 @@ const Home: NextPage = () => {
                                     <div className='text-white overflow-auto h-screen bg-vs-code flex items-center'>
                                         <div className='w-full h-full flex flex-grow align-middle justify-center'>
                                             {result?.parsed.attackTrace && (
-                                                <CreateSvg
-                                                    attackTrace={result.parsed.attackTrace}
-                                                    animation={animation}
-                                                />
+                                                   <CreateSvg
+                                                       attackTrace={result.parsed.attackTrace}
+                                                       animation={animation}
+                                                   />
                                             )}
                                         </div>
                                     </div>
