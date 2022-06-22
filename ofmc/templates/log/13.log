@@ -1,0 +1,16 @@
+INPUT:
+   AndrewSecureRPCSecrecy.AnB
+SUMMARY:
+  NO_ATTACK_FOUND
+GOAL:
+  as specified
+DETAILS:
+  BOUNDED_NUMBER_OF_SESSIONS
+BACKEND:
+  Open-Source Fixedpoint Model-Checker version 2020
+STATISTICS:
+  TIME 1123 ms
+  parseTime 0 ms
+  visitedNodes: 2632 nodes
+  depth: 10 plies
+

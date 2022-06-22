@@ -1,0 +1,16 @@
+INPUT:
+   ofmc/user-created/d2f2284f-8452-4f40-80a6-3f596b9d1f61.AnB
+SUMMARY:
+  NO_ATTACK_FOUND
+GOAL:
+  as specified
+DETAILS:
+  BOUNDED_NUMBER_OF_SESSIONS
+BACKEND:
+  Open-Source Fixedpoint Model-Checker version 2020
+STATISTICS:
+  TIME 1630 ms
+  parseTime 0 ms
+  visitedNodes: 960 nodes
+  depth: 10 plies
+
