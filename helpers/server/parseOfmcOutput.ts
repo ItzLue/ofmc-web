@@ -4,7 +4,7 @@ const parseOfmcOutput = (output: string): IFormattedOutput => {
     const lines = output.split('\n')
     const inputFile = lines[1].split('/')[2]
     const attackFound = !output.includes('NO_ATTACK_FOUND')
-    const goal = lines[5]
+    const goal = lines[lines.findIndex((line) => line.includes('GOAL')) + 1]
     const visitedNodesLine = lines.find((line) => line.includes('visitedNodes'))
     const depthLine = lines.find((line) => line.includes('depth'))
     const timeLine = lines.find((line) => line.includes('TIME'))
